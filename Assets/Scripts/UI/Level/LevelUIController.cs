@@ -22,7 +22,15 @@ public class LevelUIController : MonoBehaviour
 
     public void Start()
     {
-        _levelNameText.text = GameManager.Instance._currentLevelData.Title;
+        if(GameManager.Instance.CurrentLevelData != null) // if we open the Level scene from the Unity inspector, initialisation is triggered through the GameManager
+        {
+            Initialise();
+        }
+    }
+
+    public void Initialise()
+    {
+        _levelNameText.text = GameManager.Instance.CurrentLevelData.Title;
     }
 
     public void ToLevelSelection()

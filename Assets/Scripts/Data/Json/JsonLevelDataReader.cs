@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
 public class JsonLevelDataReader : IJsonFileReader
