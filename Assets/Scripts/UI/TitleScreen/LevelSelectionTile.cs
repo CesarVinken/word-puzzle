@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,9 @@ public class LevelSelectionTile : MonoBehaviour
     [SerializeField] private Button _playButton;
     [SerializeField] private GameObject _levelButtonLockedGO;
     [SerializeField] private GameObject _levelButtonAvailableGO;
+
+    private LevelDataModel _levelData;
+    private UserLevelDataModel _userLevelData;
 
     public void Setup()
     {
@@ -36,8 +40,17 @@ public class LevelSelectionTile : MonoBehaviour
 
     public void Initialise(LevelDataModel levelData)
     {
-        SetName(levelData.LevelNumber, levelData.Title);
-        SetHighScore(1000);
+        _levelData = levelData;
+        _userLevelData = GameManager.Instance.UserData.Levels.FirstOrDefault(l => l.LevelNumber == _levelData.LevelNumber);
+
+        if (_userLevelData == null)
+        {
+            ConsoleLog.Error(LogCategory.General, $"Cannot find user level data for level {_levelData.LevelNumber}");
+        }
+
+        SetName(_levelData.LevelNumber, _levelData.Title);
+        SetHighScore(_userLevelData.HighScore);
+        SetPlayButton(_levelData.LevelNumber, _userLevelData.HighScore);
     }
 
     public void SetName(int levelNumber, string levelName)
@@ -45,15 +58,34 @@ public class LevelSelectionTile : MonoBehaviour
         _nameText.text = $"Level {levelNumber} - {levelName}";
     }
     
-    public void SetHighScore(int score)
+    public void SetHighScore(int highScore)
     {
-        if(score == -1)
+        if(highScore == -1)
         {
             _scoreText.text = $"No score yet";
         }
         else
         {
-            _scoreText.text = $"High score: {score}";
+            _scoreText.text = $"High score: {highScore}";
         }
     }
+
+    private void SetPlayButton(int levelNumber, int highScore)
+    {
+        // A level is playable if it is the first level or when it has any high score
+        if (highScore > -1 || levelNumber == 1)
+        {
+            _levelButtonAvailableGO.SetActive(true);
+            _levelButtonLockedGO.SetActive(false);
+        }
+        else
+        {
+            _levelButtonAvailableGO.SetActive(false);
+            _levelButtonLockedGO.SetActive(true);
+        }
+    }
+}
+
+public class LevelSelectionTileHandler
+{
 }

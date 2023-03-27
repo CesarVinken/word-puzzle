@@ -6,7 +6,7 @@ public class JsonUserLevelDataWriter : IJsonFileWriter
     private SerialisableUserGameData _data;
     private string _path;
 
-    public void WriteData<T>(T configurationData, string fileName = "userb")
+    public void WriteData<T>(T configurationData, string fileName = "user")
     {
         Directory.CreateDirectory(Path.Combine(Application.dataPath, "StreamingAssets", "User"));
 

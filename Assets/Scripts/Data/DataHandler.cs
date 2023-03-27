@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class DataHandler
 {
-    private List<string> levelFileNames = new List<string>();
+    private List<string> _levelFileNames = null;
 
     public void Initialise()
     {
         string filePath = Path.Combine(Path.Combine(Application.streamingAssetsPath, "Levels"));
 
-        levelFileNames = Directory.GetFiles(filePath)
+        _levelFileNames = Directory.GetFiles(filePath)
             .Where(file => !file.EndsWith(".meta"))
             .Select(Path.GetFileName)
             .ToList();
@@ -21,9 +21,9 @@ public class DataHandler
     {
         List<LevelDataModel> levels = new List<LevelDataModel>();
 
-        for (int i = 0; i < levelFileNames.Count; i++)
+        for (int i = 0; i < _levelFileNames.Count; i++)
         {
-            string levelFileName = levelFileNames[i];
+            string levelFileName = _levelFileNames[i];
             LevelDataModel levelData = GetLevelData(levelFileName);
 
             levels.Add(levelData);
@@ -67,6 +67,9 @@ public class DataHandler
 
     public UserGameDataModel GetUserData()
     {
-        return null;
+        SerialisableUserGameData serialisableUserGameData = new JsonUserGameDataReader().ReadData<SerialisableUserGameData>();
+        UserGameDataModel userGameDataModel = serialisableUserGameData.Deserialise();
+
+        return userGameDataModel;
     }
 }
