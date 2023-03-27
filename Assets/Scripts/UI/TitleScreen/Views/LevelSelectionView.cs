@@ -24,13 +24,13 @@ public class LevelSelectionView : MonoBehaviour, ITitleScreenView
 
     public void Initialise()
     {
-        List<LevelDataModel> gameData = GameManager.Instance.GameData;
+        List<LevelDataModel> levels = GameManager.Instance.GameData.Levels;
         
-        for (int i = 0; i < gameData.Count; i++)
+        for (int i = 0; i < levels.Count; i++)
         {
-            ConsoleLog.Log(LogCategory.Data, $"Add tile for level {gameData[i].LevelNumber} {gameData[i].Title}");
+            ConsoleLog.Log(LogCategory.Data, $"Add tile for level {levels[i].LevelNumber} {levels[i].Title}");
 
-            AddTile(gameData[i]);
+            AddTile(levels[i]);
         }
     }
 

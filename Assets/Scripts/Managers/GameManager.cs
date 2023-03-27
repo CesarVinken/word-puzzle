@@ -7,8 +7,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public List<LevelDataModel> GameData { get; private set; }
-    public List<UserLevelDataModel> UserData { get; private set; }
+    public GameDataModel GameData { get; private set; }
+    public UserGameDataModel UserData { get; private set; }
     
     private DataHandler _dataHandler;
 

@@ -1,4 +1,4 @@
 public interface IJsonFileWriter
 {
-    void SerialiseData<T>(T data, string fileName);
+    void WriteData<T>(T data, string fileName);
 }

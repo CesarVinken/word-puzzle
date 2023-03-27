@@ -17,22 +17,24 @@ public class DataHandler
             .ToList();
     }
 
-    public List<LevelDataModel> GetGameData()
+    public GameDataModel GetGameData()
     {
-        List<LevelDataModel> gameData = new List<LevelDataModel>();
+        List<LevelDataModel> levels = new List<LevelDataModel>();
 
         for (int i = 0; i < levelFileNames.Count; i++)
         {
             string levelFileName = levelFileNames[i];
             LevelDataModel levelData = GetLevelData(levelFileName);
 
-            gameData.Add(levelData);
+            levels.Add(levelData);
         }
 
         // keep the levels sorted by level number, otherwise 1 is followed by 11 instead of 2
-        gameData = gameData.OrderBy(l => l.LevelNumber).ToList();
+        levels = levels.OrderBy(l => l.LevelNumber).ToList();
 
-        ConsoleLog.Log(LogCategory.Data, $"Loaded data for {gameData.Count} levels", LogPriority.Low);
+        GameDataModel gameData = new GameDataModel(levels);
+
+        ConsoleLog.Log(LogCategory.Data, $"Loaded data for {gameData.Levels.Count} levels", LogPriority.Normal);
 
         return gameData;
     }
@@ -63,8 +65,8 @@ public class DataHandler
         throw new CouldNotParseException($"Could not parse '{numberString}' from the level file name '{levelFileName}' as a number.");
     }
 
-    public List<UserLevelDataModel> GetUserData()
+    public UserGameDataModel GetUserData()
     {
-        return new List<UserLevelDataModel>();
+        return null;
     }
 }
