@@ -34,9 +34,9 @@ public class LevelSelectionTile : MonoBehaviour
         }
     }
 
-    public void Initialise()
+    public void Initialise(LevelDataModel levelData)
     {
-        SetName(1, "tempy");
+        SetName(levelData.LevelNumber, levelData.Title);
         SetHighScore(1000);
     }
 
@@ -49,11 +49,11 @@ public class LevelSelectionTile : MonoBehaviour
     {
         if(score == -1)
         {
-            _nameText.text = $"No score yet";
+            _scoreText.text = $"No score yet";
         }
         else
         {
-            _nameText.text = $"High score: {score}";
+            _scoreText.text = $"High score: {score}";
         }
     }
 }

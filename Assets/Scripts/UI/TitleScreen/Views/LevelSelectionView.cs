@@ -24,31 +24,23 @@ public class LevelSelectionView : MonoBehaviour, ITitleScreenView
 
     public void Initialise()
     {
-        //temporary
-        AddTile();
-        AddTile();
-        AddTile();
-        AddTile();
-        AddTile();
-        AddTile();
-        AddTile();
-        AddTile();
-        AddTile();
-        AddTile();
-        AddTile();
-        AddTile();
-        AddTile();
-        AddTile();
-        AddTile();
+        List<LevelDataModel> gameData = GameManager.Instance.GameData;
+        
+        for (int i = 0; i < gameData.Count; i++)
+        {
+            ConsoleLog.Log(LogCategory.Data, $"Add tile for level {gameData[i].LevelNumber} {gameData[i].Title}");
+
+            AddTile(gameData[i]);
+        }
     }
 
-    public void AddTile()
+    public void AddTile(LevelDataModel levelData)
     {
         // Move to creator class
         GameObject levelSelectionTileGO = GameObject.Instantiate(_levelSelectionTilePrefab, _tilesContainer);
         LevelSelectionTile levelSelectionTile = levelSelectionTileGO.GetComponent<LevelSelectionTile>();
         levelSelectionTile.Setup();
-        levelSelectionTile.Initialise();
+        levelSelectionTile.Initialise(levelData);
     }
 
     public void Show()
