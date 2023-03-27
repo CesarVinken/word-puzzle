@@ -4,24 +4,16 @@ using UnityEngine.UI;
 
 public class MainView : MonoBehaviour, ITitleScreenView
 {
-    [SerializeField] private List<Button> _buttons = new List<Button>();
-    [SerializeField] private List<ITitleScreenButton> _titleScreenButtons = new List<ITitleScreenButton>();
+    [SerializeField] private ToLevelSelectionButton _button;
 
     public void Setup()
     {
-        for (int i = 0; i < _buttons.Count; i++)
+        if (_button == null)
         {
-            ITitleScreenButton titleScreenButton = _buttons[i].gameObject.GetComponent<ITitleScreenButton>();
-
-            if (titleScreenButton == null)
-            {
-                ConsoleLog.Error(LogCategory.Initialisation, $"Could not find a button script on the {_buttons[i].gameObject.name} button");
-            }
-
-            _titleScreenButtons.Add(titleScreenButton);
-
-            titleScreenButton.Setup();
+            ConsoleLog.Error(LogCategory.Initialisation, $"Could not find button on {gameObject.name}");
         }
+
+        _button.Setup();
     }
 
     public void Initialise() { }

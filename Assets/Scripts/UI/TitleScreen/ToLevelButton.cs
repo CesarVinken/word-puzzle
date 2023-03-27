@@ -1,16 +1,20 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ToLevelSelectionButton : MonoBehaviour, ITitleScreenButton
+public class ToLevelButton : MonoBehaviour, ITitleScreenButton
 {
     [SerializeField] private Button _button;
 
-    public void Setup()
+    private LevelSelectionTile _levelSelectionTile;
+
+    public void Setup(LevelSelectionTile levelSelectionTile)
     {
         if (_button == null)
         {
             ConsoleLog.Error(LogCategory.Initialisation, $"Could not find button on {gameObject.name}");
         }
+
+        _levelSelectionTile = levelSelectionTile;
 
         _button.onClick.RemoveAllListeners();
         _button.onClick.AddListener(delegate { OnClick(); });
@@ -18,7 +22,6 @@ public class ToLevelSelectionButton : MonoBehaviour, ITitleScreenButton
 
     public void OnClick()
     {
-        TitleScreenController.Instance.ToLevelSelectionView();
+        TitleScreenController.Instance.ToLevel(_levelSelectionTile.LevelData);
     }
 }
-

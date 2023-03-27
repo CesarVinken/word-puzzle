@@ -7,12 +7,12 @@ public class LevelSelectionTile : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private TextMeshProUGUI _scoreText;
-    [SerializeField] private Button _playButton;
+    [SerializeField] private ToLevelButton _toLevelButton;
     [SerializeField] private GameObject _levelButtonLockedGO;
     [SerializeField] private GameObject _levelButtonAvailableGO;
 
-    private LevelDataModel _levelData;
-    private UserLevelDataModel _userLevelData;
+    public LevelDataModel LevelData { get; private set; }
+    public UserLevelDataModel UserLevelData { get; private set; }
 
     public void Setup()
     {
@@ -24,9 +24,9 @@ public class LevelSelectionTile : MonoBehaviour
         {
             ConsoleLog.Error(LogCategory.Initialisation, $"Could not find _scoreText on {gameObject.name}");
         }
-        if (_playButton == null)
+        if (_toLevelButton == null)
         {
-            ConsoleLog.Error(LogCategory.Initialisation, $"Could not find _playButton on {gameObject.name}");
+            ConsoleLog.Error(LogCategory.Initialisation, $"Could not find _toLevelButton on {gameObject.name}");
         }
         if (_levelButtonLockedGO == null)
         {
@@ -36,21 +36,23 @@ public class LevelSelectionTile : MonoBehaviour
         {
             ConsoleLog.Error(LogCategory.Initialisation, $"Could not find _levelButtonAvailableGO on {gameObject.name}");
         }
+
+        _toLevelButton.Setup(this);
     }
 
     public void Initialise(LevelDataModel levelData)
     {
-        _levelData = levelData;
-        _userLevelData = GameManager.Instance.UserData.Levels.FirstOrDefault(l => l.LevelNumber == _levelData.LevelNumber);
+        LevelData = levelData;
+        UserLevelData = GameManager.Instance.UserData.Levels.FirstOrDefault(l => l.LevelNumber == LevelData.LevelNumber);
 
-        if (_userLevelData == null)
+        if (UserLevelData == null)
         {
-            ConsoleLog.Error(LogCategory.General, $"Cannot find user level data for level {_levelData.LevelNumber}");
+            ConsoleLog.Error(LogCategory.General, $"Cannot find user level data for level {LevelData.LevelNumber}");
         }
 
-        SetName(_levelData.LevelNumber, _levelData.Title);
-        SetHighScore(_userLevelData.HighScore);
-        SetPlayButton(_levelData.LevelNumber, _userLevelData.HighScore);
+        SetName(LevelData.LevelNumber, LevelData.Title);
+        SetHighScore(UserLevelData.HighScore);
+        SetPlayButton(LevelData.LevelNumber, UserLevelData.HighScore);
     }
 
     public void SetName(int levelNumber, string levelName)

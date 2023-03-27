@@ -32,16 +32,9 @@ public class TitleScreenController : MonoBehaviour
         SetCurrentView(_titleView);
     }
 
-    public void OnButtonClick(TitleScreenButtonType titleScreenButtonType)
+    public void ToLevel(LevelDataModel levelData)
     {
-        switch (titleScreenButtonType)
-        {
-            case TitleScreenButtonType.ToLevelSelection:
-                ToLevelSelectionView();
-                break;
-            default:
-                throw new NotImplementedException("TitleScreenButtonType", titleScreenButtonType.ToString());
-        }
+        GameManager.Instance.ToLevel(levelData);
     }
 
     public void ToLevelSelectionView()

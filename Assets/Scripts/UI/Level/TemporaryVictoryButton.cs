@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ToLevelSelectionButton : MonoBehaviour, ITitleScreenButton
+public class TemporaryVictoryButton : MonoBehaviour, ILevelUIButton
 {
     [SerializeField] private Button _button;
 
@@ -18,7 +18,6 @@ public class ToLevelSelectionButton : MonoBehaviour, ITitleScreenButton
 
     public void OnClick()
     {
-        TitleScreenController.Instance.ToLevelSelectionView();
+        LevelUIController.Instance.ToLevelSelection();
     }
 }
-
