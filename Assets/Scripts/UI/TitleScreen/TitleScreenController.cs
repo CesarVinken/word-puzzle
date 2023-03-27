@@ -4,7 +4,7 @@ public class TitleScreenController : MonoBehaviour
 {
     public static TitleScreenController Instance;
 
-    [SerializeField] private TitleView _titleView;
+    [SerializeField] private MainView _titleView;
     [SerializeField] private LevelSelectionView _levelSelectionView;
 
     private ITitleScreenView _currentView;

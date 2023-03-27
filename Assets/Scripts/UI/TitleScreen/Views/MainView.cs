@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TitleView : MonoBehaviour, ITitleScreenView
+public class MainView : MonoBehaviour, ITitleScreenView
 {
     [SerializeField] private List<Button> _buttons = new List<Button>();
     [SerializeField] private List<ITitleScreenButton> _titleScreenButtons = new List<ITitleScreenButton>();
