@@ -1,0 +1,14 @@
+using UnityEngine;
+
+public class #SCRIPTNAME#
+{
+    public void Setup()
+    {
+        #NOTRIM#
+    }
+
+    public void Initialise()
+    {
+        #NOTRIM#
+    }
+}
