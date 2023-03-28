@@ -43,8 +43,6 @@ public class GameManager : MonoBehaviour
             default:
                 throw new NotImplementedException("SceneName", sceneName);
         }
-
-        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     public void Start()
@@ -85,11 +83,5 @@ public class GameManager : MonoBehaviour
     {
         SetCurrentLevel(null);
         SceneManager.LoadScene("Title");
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        // Do something when the scene is loaded
-        Debug.Log("Scene " + scene.name + " loaded in mode " + mode.ToString());
     }
 }

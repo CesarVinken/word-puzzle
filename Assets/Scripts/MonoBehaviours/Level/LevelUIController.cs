@@ -6,10 +6,10 @@ public class LevelUIController : MonoBehaviour
     public static LevelUIController Instance;
 
     [SerializeField] private TextMeshProUGUI _levelNameText;
-    [SerializeField] private TextMeshProUGUI _currentScoreText;
-    [SerializeField] private TextMeshProUGUI _wordScoreProjectionText;
     [SerializeField] private TextMeshProUGUI _submittedWordsText;
 
+    [SerializeField] private CurrentScoreText _currentScoreText;
+    [SerializeField] private WordScoreProjectionText _wordScoreProjection;
     [SerializeField] private FormedWordContainer _formedWordContainer;
     [SerializeField] private CharacterTileContainer _characterTileContainer;
 
@@ -27,7 +27,7 @@ public class LevelUIController : MonoBehaviour
         {
             ConsoleLog.Error(LogCategory.General, $"Could not find _currentScoreText on {gameObject.name}");
         }
-        if (_wordScoreProjectionText == null)
+        if (_wordScoreProjection == null)
         {
             ConsoleLog.Error(LogCategory.General, $"Could not find _wordScoreProjectionText on {gameObject.name}");
         }
@@ -64,6 +64,8 @@ public class LevelUIController : MonoBehaviour
         _wordConfirmButton.Setup();
         _settingsMenuButton.Setup();
 
+        _currentScoreText.Setup();
+        _wordScoreProjection.Setup();
         _formedWordContainer.Setup();
         _characterTileContainer.Setup();
 
@@ -78,10 +80,12 @@ public class LevelUIController : MonoBehaviour
     {
         _levelNameText.text = GameManager.Instance.CurrentLevelData.Title;
 
+        _currentScoreText.Initialise();
         _undoButton.Initialise();
         _wordConfirmButton.Initialise();
         _settingsMenuButton.Initialise();
 
+        _wordScoreProjection.Initialise();
         _formedWordContainer.Initialise();
         _characterTileContainer.Initialise();
 

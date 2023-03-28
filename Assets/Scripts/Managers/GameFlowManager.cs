@@ -8,8 +8,10 @@ public class GameFlowManager : MonoBehaviour
 
     public List<LetterPickAction> LastLetterPickActions = new List<LetterPickAction>();
     public Dictionary<int, CharacterTile> TilesById { get; private set; }  = new Dictionary<int, CharacterTile>();
+    public int CurrentScore { get; private set; }
 
     public PlayerActionHandler MoveHandler { get; private set; }
+    public ValidationHandler ValidationHandler { get; private set; }
 
     public event EventHandler<LetterPickEvent> LetterPickEvent;
     public event EventHandler<WordSubmitEvent> WordSubmitEvent;
@@ -21,6 +23,7 @@ public class GameFlowManager : MonoBehaviour
         Instance = this;
 
         MoveHandler = new PlayerActionHandler();
+        ValidationHandler = new ValidationHandler();
     }
 
     public void Start()
@@ -47,6 +50,9 @@ public class GameFlowManager : MonoBehaviour
     public void OnLetterPickEvent(object sender, LetterPickEvent e)
     {
         LastLetterPickActions.Add(e.LetterPickAction);
+
+        string word = GetFormedWord();
+        ValidationHandler.Validate(word);
     }
 
     public void OnWordSubmitEvent(object sender, WordSubmitEvent e)
@@ -54,9 +60,33 @@ public class GameFlowManager : MonoBehaviour
         ClearActions();
     }
 
-    public int GetCurrentWordScore()
+    public void SetCurrentScore(int newScore)
     {
-        return -1;
+        CurrentScore = newScore;
+    }
+
+    public string GetFormedWord()
+    {
+        string word = "";
+        for (int i = 0; i < LastLetterPickActions.Count; i++)
+        {
+            word += LastLetterPickActions[i].CharacterTile.CharacterTileData.Character;
+        }
+
+        return word;
+    }
+
+    public int GetCurrentWordScore(string word)
+    {
+        int score = 0;
+
+        for (int i = 0; i < word.Length; i++)
+        {
+            string character = word[i].ToString();
+            score += CharacterUtility.GetCharacterValue(character);
+        }
+
+        return score * (word.Length * 10);
     }
 
     #region events
@@ -73,10 +103,10 @@ public class GameFlowManager : MonoBehaviour
         WordSubmitEvent?.Invoke(this, new WordSubmitEvent(wordPickAction));
     } 
     
-    public void ExecuteWordValidatedEvent()
+    public void ExecuteWordValidatedEvent(bool isValid)
     {
         ConsoleLog.Log(LogCategory.Events, $"Execute WordValidatedEvent");
-        WordValidatedEvent?.Invoke(this, new WordValidatedEvent());
+        WordValidatedEvent?.Invoke(this, new WordValidatedEvent(isValid));
     }
 
     #endregion

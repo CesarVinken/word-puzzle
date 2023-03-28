@@ -16,16 +16,8 @@ public class PlayerActionHandler
 
     public void SubmitWord()
     {
-        List<LetterPickAction> letterPickActions = GameFlowManager.Instance.LastLetterPickActions;
-
-        string word = "";
-        for (int i = 0; i < letterPickActions.Count; i++)
-        {
-            //characters.Add(new FormedWordCharacter(letterPickActions[i].CharacterTile.CharacterTileData.Character));
-            word += letterPickActions[i].CharacterTile.CharacterTileData.Character;
-        }
-
-        int wordValue = GameFlowManager.Instance.GetCurrentWordScore();
+        string word = GameFlowManager.Instance.GetFormedWord();;
+        int wordValue = GameFlowManager.Instance.GetCurrentWordScore(word);
 
         FormedWord formedWord = new FormedWord(word, wordValue);
 
