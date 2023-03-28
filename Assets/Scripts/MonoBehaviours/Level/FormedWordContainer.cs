@@ -1,14 +1,15 @@
 using UnityEngine;
 
-public class LetterTileContainer : MonoBehaviour
+public class FormedWordContainer : MonoBehaviour
 {
     public void Setup()
     {
-        
+
     }
 
     public void Initialise()
     {
-        
+
     }
+
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,5 +23,6 @@ public class SettingsMenuButton : MonoBehaviour, ILevelUIButton
 
     public void OnClick()
     {
+        LevelUIController.Instance.ToLevelSelection();
     }
 }

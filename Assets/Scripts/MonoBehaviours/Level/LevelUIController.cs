@@ -10,12 +10,11 @@ public class LevelUIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _wordScoreProjectText;
 
     [SerializeField] private FormedWordContainer _formedWordContainer;
-    [SerializeField] private LetterTileContainer _letterTileContainer;
+    [SerializeField] private CharacterTileContainer _letterTileContainer;
 
     [SerializeField] private UndoButton _undoButton;
     [SerializeField] private WordConfirmButton _wordConfirmButton;
-
-    [SerializeField] private TemporaryVictoryButton _temporaryVictoryButton;
+    [SerializeField] private SettingsMenuButton _settingsMenuButton;
 
     public void Awake()
     {
@@ -49,12 +48,19 @@ public class LevelUIController : MonoBehaviour
         {
             ConsoleLog.Error(LogCategory.General, $"Could not _wordConfirmButton on {gameObject.name}");
         }
+        if (_settingsMenuButton == null)
+        {
+            ConsoleLog.Error(LogCategory.General, $"Could not _settingsMenuButton on {gameObject.name}");
+        }
 
         Instance = this;
 
         _undoButton.Setup();
         _wordConfirmButton.Setup();
-        _temporaryVictoryButton.Setup();
+        _settingsMenuButton.Setup();
+
+        _formedWordContainer.Setup();
+        _letterTileContainer.Setup();
     }
 
     public void Start()
@@ -71,7 +77,10 @@ public class LevelUIController : MonoBehaviour
 
         _undoButton.Initialise();
         _wordConfirmButton.Initialise();
-        _temporaryVictoryButton.Initialise();
+        _settingsMenuButton.Initialise();
+
+        _formedWordContainer.Initialise();
+        _letterTileContainer.Initialise();
     }
 
     public void ToLevelSelection()
