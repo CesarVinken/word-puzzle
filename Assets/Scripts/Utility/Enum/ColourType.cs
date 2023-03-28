@@ -1,13 +1,8 @@
 public enum ColourType
 {
     Black,
-    Blue,
-    Cyan,
     Empty,
     ErrorRed,
-    Magenta,
-    Orange,
+    DisabledGray,
     SelectedBackground,
-    Yellow,
-    YellowDark
 }

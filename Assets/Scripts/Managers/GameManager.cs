@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
         GameData = _dataHandler.GetGameData();
         UserData = _dataHandler.GetUserData();
 
-        if(_firstScene == SceneType.Level)
+        if(_firstScene == SceneType.Level) // this means this is a start up from the unity Level scene and we never selected a current level in the menu
         {
             SetCurrentLevel(GameData.Levels[0]);
 

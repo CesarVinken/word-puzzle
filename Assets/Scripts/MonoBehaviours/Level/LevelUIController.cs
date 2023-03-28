@@ -10,7 +10,7 @@ public class LevelUIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _wordScoreProjectText;
 
     [SerializeField] private FormedWordContainer _formedWordContainer;
-    [SerializeField] private CharacterTileContainer _letterTileContainer;
+    [SerializeField] private CharacterTileContainer _characterTileContainer;
 
     [SerializeField] private UndoButton _undoButton;
     [SerializeField] private WordConfirmButton _wordConfirmButton;
@@ -35,7 +35,7 @@ public class LevelUIController : MonoBehaviour
         {
             ConsoleLog.Error(LogCategory.General, $"Could not _formedWordContainer on {gameObject.name}");
         }
-        if (_letterTileContainer == null)
+        if (_characterTileContainer == null)
         {
             ConsoleLog.Error(LogCategory.General, $"Could not _letterTileContainer on {gameObject.name}");
         }
@@ -60,19 +60,19 @@ public class LevelUIController : MonoBehaviour
         _settingsMenuButton.Setup();
 
         _formedWordContainer.Setup();
-        _letterTileContainer.Setup();
-    }
+        _characterTileContainer.Setup();
 
-    public void Start()
-    {
-        if(GameManager.Instance.CurrentLevelData != null) // if we open the Level scene from the Unity inspector, initialisation is triggered through the GameManager
+        if (GameManager.Instance.CurrentLevelData != null) // if we open the Level scene from the Unity inspector, initialisation is triggered through the GameManager
         {
             Initialise();
         }
     }
 
+
     public void Initialise()
     {
+
+        ConsoleLog.Warning(LogCategory.General, $"INITIALISE");
         _levelNameText.text = GameManager.Instance.CurrentLevelData.Title;
 
         _undoButton.Initialise();
@@ -80,7 +80,7 @@ public class LevelUIController : MonoBehaviour
         _settingsMenuButton.Initialise();
 
         _formedWordContainer.Initialise();
-        _letterTileContainer.Initialise();
+        _characterTileContainer.Initialise();
     }
 
     public void ToLevelSelection()

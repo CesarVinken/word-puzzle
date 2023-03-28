@@ -12,8 +12,8 @@ public class ColourUtility
                 return new Color(200f / 255f, 0, 0);
             case ColourType.SelectedBackground:
                 return new Color(231f / 255f, 247f / 255f, 177f / 255f);
-            case ColourType.YellowDark:
-                return new Color(241f / 255f, 206f / 255f, 49f / 255f);
+            case ColourType.DisabledGray:
+                return new Color(145f / 255f, 145f / 255f, 145f / 255f);
             default:
                 new NotImplementedException("ColourType", colourType.ToString());
                 return Color.black;
@@ -26,24 +26,14 @@ public class ColourUtility
         {
             case ColourType.Black:
                 return "#000000";
-            case ColourType.Blue:
-                return "#0013C1";
-            case ColourType.Cyan:
-                return "#48D1AC";
             case ColourType.Empty:
                 return "#FFFFFF";
             case ColourType.ErrorRed:
                 return "#C60000";
-            case ColourType.Magenta:
-                return "#C02BA6";
-            case ColourType.Orange:
-                return "#EC762E";
             case ColourType.SelectedBackground:
                 return "#69FDFF";
-            case ColourType.Yellow:
-                return "#FFF26C";
-            case ColourType.YellowDark:
-                return "#F1CE31";
+            case ColourType.DisabledGray:
+                return "#919191";
             default:
                 new NotImplementedException("ColourType", colourType.ToString());
                 return "#000000";

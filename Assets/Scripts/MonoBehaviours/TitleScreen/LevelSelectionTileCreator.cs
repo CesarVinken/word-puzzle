@@ -18,7 +18,7 @@ public class LevelSelectionTileCreator
 
         for (int i = 0; i < levels.Count; i++)
         {
-            ConsoleLog.Log(LogCategory.Data, $"Add tile for level {levels[i].LevelNumber} {levels[i].Title}");
+            ConsoleLog.Log(LogCategory.Data, $"Add tile for level {levels[i].LevelNumber} {levels[i].Title}", LogPriority.Low);
 
             AddTile(levels[i]);
         }
