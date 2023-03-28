@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TemporaryVictoryButton : MonoBehaviour, ILevelUIButton
+public class WordConfirmButton : MonoBehaviour, ILevelUIButton
 {
     [SerializeField] private Button _button;
 
@@ -18,11 +18,9 @@ public class TemporaryVictoryButton : MonoBehaviour, ILevelUIButton
 
     public void Initialise()
     {
-
     }
 
     public void OnClick()
     {
-        LevelUIController.Instance.ToLevelSelection();
     }
 }
