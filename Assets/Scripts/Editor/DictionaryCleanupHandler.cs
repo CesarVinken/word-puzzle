@@ -1,37 +1,43 @@
 using Newtonsoft.Json;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class DictionaryCleanupHandler
 {
-    public static void CleanUp()
+    public static async void CleanUp()
     {
-        string[] rawWords = GetWordsData();
-        string[] filteredWords = FilterWords(rawWords);
+        string rawWordsData = await GetWordsData();
+        string[] filteredWords = FilterWords(rawWordsData);
         WriteFilteredWordsData(filteredWords);
     }
 
-    private static string[] GetWordsData()
+    private static async Task<string> GetWordsData()
     {
-        string filePath = Path.Combine(Application.streamingAssetsPath, "Words", "RawWords.txt");
+        using var client = new HttpClient();
 
-        if (!File.Exists(filePath))
+        try
         {
-            ConsoleLog.Warning(LogCategory.General, $"Could not finding the RawWords file. Returning");
-            return new string[] { };
+            var url = "https://raw.githubusercontent.com/lorenbrichter/Words/master/Words/en.txt";
+            var response = await client.GetAsync(url);
+
+            response.EnsureSuccessStatusCode(); // throws an exception if the response status code is an error
+
+            return await response.Content.ReadAsStringAsync();
         }
-
-        string jsonContent = File.ReadAllText(filePath);
-
-        string[] words = jsonContent.Split("\n");
-
-        return words;
+        catch (HttpRequestException ex)
+        {
+            throw new System.Exception($"Failed to download the content: {ex.Message}");
+        }
     }
 
-    private static string[] FilterWords(string[] unfilteredWords)
+    private static string[] FilterWords(string rawWordsData)
     {
         int maximumCharacters = 7;
+
+        string[] unfilteredWords = rawWordsData.Split("\n");
         string[] filteredWords = unfilteredWords.Where(w => w.Length <= maximumCharacters).ToArray();
 
         for (int i = 0; i < filteredWords.Length; i++)
