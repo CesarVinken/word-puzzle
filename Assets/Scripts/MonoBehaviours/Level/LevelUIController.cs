@@ -71,8 +71,6 @@ public class LevelUIController : MonoBehaviour
 
     public void Initialise()
     {
-
-        ConsoleLog.Warning(LogCategory.General, $"INITIALISE");
         _levelNameText.text = GameManager.Instance.CurrentLevelData.Title;
 
         _undoButton.Initialise();

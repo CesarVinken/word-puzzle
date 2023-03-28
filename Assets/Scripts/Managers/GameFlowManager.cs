@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,10 +6,13 @@ public class GameFlowManager : MonoBehaviour
 {
     public static GameFlowManager Instance;
 
-    public List<PlayerMove> LastUseActions = new List<PlayerMove>();
+    public List<PlayerMove> LastPlayerMoves = new List<PlayerMove>();
     public Dictionary<int, CharacterTile> TilesById { get; private set; }  = new Dictionary<int, CharacterTile>();
 
     public MoveHandler MoveHandler { get; private set; }
+
+    public event EventHandler<PlayerMoveEvent> PlayerMoveEvent;
+
 
     public void Awake()
     {
@@ -17,15 +21,19 @@ public class GameFlowManager : MonoBehaviour
         MoveHandler = new MoveHandler();
     }
 
+    public void Start()
+    {
+        PlayerMoveEvent += OnPlayerMoveEvent;
+    }
+
     public void SetTilesById(Dictionary<int, CharacterTile> tilesById)
     {
         TilesById = tilesById;
     }
 
-    public void AddAction(PlayerMove useCharacterTileAction)
-    {
-        LastUseActions.Add(useCharacterTileAction);
-    }
+    //public void AddAction(PlayerMove useCharacterTileAction)
+    //{
+    //}
 
     public void RemoveLastAction()
     {
@@ -35,6 +43,26 @@ public class GameFlowManager : MonoBehaviour
 
     public void ClearActions()
     {
-        LastUseActions.Clear();
+        LastPlayerMoves.Clear();
+    }
+
+    public void OnPlayerMoveEvent(object sender, PlayerMoveEvent e)
+    {
+        LastPlayerMoves.Add(e.PlayerMove);
+    }
+
+    public void ExecutePlayerMoveEvent(PlayerMove playerMove)
+    {
+        PlayerMoveEvent?.Invoke(this, new PlayerMoveEvent(playerMove));
+    }
+}
+
+public class PlayerMoveEvent : EventArgs
+{
+    public PlayerMove PlayerMove { get; private set; }
+
+    public PlayerMoveEvent(PlayerMove playerMove)
+    {
+        PlayerMove = playerMove;
     }
 }

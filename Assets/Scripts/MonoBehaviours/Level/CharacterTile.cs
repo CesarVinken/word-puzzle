@@ -152,36 +152,12 @@ public class CharacterTile : MonoBehaviour
     {
         if (State != CharacterTileState.Open) return;
 
+        if (GameFlowManager.Instance.LastPlayerMoves.Count >= 7) return; // the player cannot do more moves if the number of moves equals the maximum word length
+
         ConsoleLog.Log(LogCategory.General, $"Add {_characterText.text} to word");
         GameFlowManager.Instance.MoveHandler.UseTile(this);
     }
 }
 
-public class MoveHandler
-{
-    public void UseTile(CharacterTile characterTile)
-    {
-        new PlayerMove(characterTile).Execute();
-    }
 
-    public void UndoTile(CharacterTile characterTile)
-    {
-        // TO do
-    }
-}
 
-public class PlayerMove
-{
-    CharacterTile _characterTile;
-
-    public PlayerMove(CharacterTile characterTile)
-    {
-        _characterTile = characterTile;
-    }
-
-    public void Execute()
-    {
-        _characterTile.SetCharacterTileState(CharacterTileState.Used);
-        GameFlowManager.Instance.AddAction(this);
-    }
-}
