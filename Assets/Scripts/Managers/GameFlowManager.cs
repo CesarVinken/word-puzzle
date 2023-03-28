@@ -6,24 +6,27 @@ public class GameFlowManager : MonoBehaviour
 {
     public static GameFlowManager Instance;
 
-    public List<PlayerMove> LastPlayerMoves = new List<PlayerMove>();
+    public List<LetterPickAction> LastLetterPickActions = new List<LetterPickAction>();
     public Dictionary<int, CharacterTile> TilesById { get; private set; }  = new Dictionary<int, CharacterTile>();
 
-    public MoveHandler MoveHandler { get; private set; }
+    public PlayerActionHandler MoveHandler { get; private set; }
 
-    public event EventHandler<PlayerMoveEvent> PlayerMoveEvent;
+    public event EventHandler<LetterPickEvent> LetterPickEvent;
+    public event EventHandler<WordSubmitEvent> WordSubmitEvent;
+    public event EventHandler<WordValidatedEvent> WordValidatedEvent;
 
 
     public void Awake()
     {
         Instance = this;
 
-        MoveHandler = new MoveHandler();
+        MoveHandler = new PlayerActionHandler();
     }
 
     public void Start()
     {
-        PlayerMoveEvent += OnPlayerMoveEvent;
+        LetterPickEvent += OnLetterPickEvent;
+        WordSubmitEvent += OnWordSubmitEvent;
     }
 
     public void SetTilesById(Dictionary<int, CharacterTile> tilesById)
@@ -31,38 +34,51 @@ public class GameFlowManager : MonoBehaviour
         TilesById = tilesById;
     }
 
-    //public void AddAction(PlayerMove useCharacterTileAction)
-    //{
-    //}
-
     public void RemoveLastAction()
     {
     // todo
-
     }
 
-    public void ClearActions()
+    private void ClearActions()
     {
-        LastPlayerMoves.Clear();
+        LastLetterPickActions.Clear();
     }
 
-    public void OnPlayerMoveEvent(object sender, PlayerMoveEvent e)
+    public void OnLetterPickEvent(object sender, LetterPickEvent e)
     {
-        LastPlayerMoves.Add(e.PlayerMove);
+        LastLetterPickActions.Add(e.LetterPickAction);
     }
 
-    public void ExecutePlayerMoveEvent(PlayerMove playerMove)
+    public void OnWordSubmitEvent(object sender, WordSubmitEvent e)
     {
-        PlayerMoveEvent?.Invoke(this, new PlayerMoveEvent(playerMove));
+        ClearActions();
     }
+
+    public int GetCurrentWordScore()
+    {
+        return -1;
+    }
+
+    #region events
+
+    public void ExecuteLetterPickEvent(LetterPickAction letterPickAction)
+    {
+        ConsoleLog.Log(LogCategory.Events, $"Execute LetterPickEvent");
+        LetterPickEvent?.Invoke(this, new LetterPickEvent(letterPickAction));
+    }
+
+    public void ExecuteWordSubmitEvent(WordSubmitAction wordPickAction)
+    {
+        ConsoleLog.Log(LogCategory.Events, $"Execute WordSubmitEvent");
+        WordSubmitEvent?.Invoke(this, new WordSubmitEvent(wordPickAction));
+    } 
+    
+    public void ExecuteWordValidatedEvent()
+    {
+        ConsoleLog.Log(LogCategory.Events, $"Execute WordValidatedEvent");
+        WordValidatedEvent?.Invoke(this, new WordValidatedEvent());
+    }
+
+    #endregion
 }
 
-public class PlayerMoveEvent : EventArgs
-{
-    public PlayerMove PlayerMove { get; private set; }
-
-    public PlayerMoveEvent(PlayerMove playerMove)
-    {
-        PlayerMove = playerMove;
-    }
-}

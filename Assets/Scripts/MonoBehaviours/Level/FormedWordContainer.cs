@@ -18,17 +18,18 @@ public class FormedWordContainer : MonoBehaviour
 
     public void Initialise()
     {
-        GameFlowManager.Instance.PlayerMoveEvent += OnPlayerMoveEvent;
+        GameFlowManager.Instance.LetterPickEvent += OnPlayerMoveEvent;
+        GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
     }
 
-    public void RemoveLetter()
+    public void RemoveLetter(FormedWordCharacterTile formedWordCharacterTile)
     {
-        ConsoleLog.Log(LogCategory.General, $"TODO");
+        formedWordCharacterTile.SetContent(null);
     }
 
-    public void OnPlayerMoveEvent(object sender, PlayerMoveEvent e)
+    public void OnPlayerMoveEvent(object sender, LetterPickEvent e)
     {
-        CharacterTileDataModel characterTileData = e.PlayerMove.CharacterTile.CharacterTileData;
+        CharacterTileDataModel characterTileData = e.LetterPickAction.CharacterTile.CharacterTileData;
         FormedWordCharacter formedWordCharacter = new FormedWordCharacter(characterTileData.Character);
 
         for (int i = 0; i < _formedWordCharacters.Count; i++)
@@ -39,6 +40,14 @@ public class FormedWordContainer : MonoBehaviour
                 tile.SetContent(formedWordCharacter);
                 break;
             }
+        }
+    }
+
+    public void OnWordSubmitEvent(object sender, WordSubmitEvent e)
+    {
+        for (int i = _formedWordCharacters.Count - 1; i >= 0; i--)
+        {
+            RemoveLetter(_formedWordCharacters[i]);
         }
     }
 }

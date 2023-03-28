@@ -152,7 +152,7 @@ public class CharacterTile : MonoBehaviour
     {
         if (State != CharacterTileState.Open) return;
 
-        if (GameFlowManager.Instance.LastPlayerMoves.Count >= 7) return; // the player cannot do more moves if the number of moves equals the maximum word length
+        if (GameFlowManager.Instance.LastLetterPickActions.Count >= 7) return; // the player cannot do more moves if the number of moves equals the maximum word length
 
         ConsoleLog.Log(LogCategory.General, $"Add {_characterText.text} to word");
         GameFlowManager.Instance.MoveHandler.UseTile(this);

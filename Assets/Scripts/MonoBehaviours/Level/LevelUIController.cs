@@ -7,7 +7,8 @@ public class LevelUIController : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI _levelNameText;
     [SerializeField] private TextMeshProUGUI _currentScoreText;
-    [SerializeField] private TextMeshProUGUI _wordScoreProjectText;
+    [SerializeField] private TextMeshProUGUI _wordScoreProjectionText;
+    [SerializeField] private TextMeshProUGUI _submittedWordsText;
 
     [SerializeField] private FormedWordContainer _formedWordContainer;
     [SerializeField] private CharacterTileContainer _characterTileContainer;
@@ -24,33 +25,37 @@ public class LevelUIController : MonoBehaviour
         }
         if (_currentScoreText == null)
         {
-            ConsoleLog.Error(LogCategory.General, $"Could not _currentScoreText on {gameObject.name}");
+            ConsoleLog.Error(LogCategory.General, $"Could not find _currentScoreText on {gameObject.name}");
         }
-        if (_wordScoreProjectText == null)
+        if (_wordScoreProjectionText == null)
         {
-            ConsoleLog.Error(LogCategory.General, $"Could not _wordScoreProjectText on {gameObject.name}");
+            ConsoleLog.Error(LogCategory.General, $"Could not find _wordScoreProjectionText on {gameObject.name}");
+        }
+        if (_submittedWordsText == null)
+        {
+            ConsoleLog.Error(LogCategory.General, $"Could not find _submittedWordsText on {gameObject.name}");
         }
 
         if (_formedWordContainer == null)
         {
-            ConsoleLog.Error(LogCategory.General, $"Could not _formedWordContainer on {gameObject.name}");
+            ConsoleLog.Error(LogCategory.General, $"Could not find _formedWordContainer on {gameObject.name}");
         }
         if (_characterTileContainer == null)
         {
-            ConsoleLog.Error(LogCategory.General, $"Could not _letterTileContainer on {gameObject.name}");
+            ConsoleLog.Error(LogCategory.General, $"Could not find _letterTileContainer on {gameObject.name}");
         }
 
         if (_undoButton == null)
         {
-            ConsoleLog.Error(LogCategory.General, $"Could not _undoButton on {gameObject.name}");
+            ConsoleLog.Error(LogCategory.General, $"Could not find _undoButton on {gameObject.name}");
         }
         if (_wordConfirmButton == null)
         {
-            ConsoleLog.Error(LogCategory.General, $"Could not _wordConfirmButton on {gameObject.name}");
+            ConsoleLog.Error(LogCategory.General, $"Could not find _wordConfirmButton on {gameObject.name}");
         }
         if (_settingsMenuButton == null)
         {
-            ConsoleLog.Error(LogCategory.General, $"Could not _settingsMenuButton on {gameObject.name}");
+            ConsoleLog.Error(LogCategory.General, $"Could not find _settingsMenuButton on {gameObject.name}");
         }
 
         Instance = this;
@@ -79,10 +84,17 @@ public class LevelUIController : MonoBehaviour
 
         _formedWordContainer.Initialise();
         _characterTileContainer.Initialise();
+
+        GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
     }
 
     public void ToLevelSelection()
     {
         GameManager.Instance.ToLevelSelection();
+    }
+
+    public void OnWordSubmitEvent(object sender, WordSubmitEvent e)
+    {
+        _submittedWordsText.text += $"{e.WordPickAction.FormedWord.Word}\n";
     }
 }
