@@ -52,7 +52,7 @@ public class GameFlowManager : MonoBehaviour
         LastLetterPickActions.Add(e.LetterPickAction);
 
         string word = GetFormedWord();
-        ValidationHandler.Validate(word);
+        ValidationHandler.Validate(word.ToLower());
     }
 
     public void OnWordSubmitEvent(object sender, WordSubmitEvent e)

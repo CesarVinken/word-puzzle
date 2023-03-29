@@ -38,7 +38,7 @@ public class DictionaryCleanupHandler
         int maximumCharacters = 7;
 
         string[] unfilteredWords = rawWordsData.Split("\n");
-        string[] filteredWords = unfilteredWords.Where(w => w.Length <= maximumCharacters).ToArray();
+        string[] filteredWords = unfilteredWords.Where(w => (w.Length <= maximumCharacters && !string.IsNullOrEmpty(w))).ToArray();
 
         for (int i = 0; i < filteredWords.Length; i++)
         {
@@ -52,10 +52,12 @@ public class DictionaryCleanupHandler
 
     private static void WriteFilteredWordsData(string[] words)
     {
+        SerialisableWordDictionaryData serialisableWordDictionaryData = new SerialisableWordDictionaryData(words);
+
         Directory.CreateDirectory(Path.Combine(Application.dataPath, "StreamingAssets", "Words"));
 
-        string filePath = Path.Combine(Application.streamingAssetsPath, "Words", "Words");
-        string jsonString = JsonConvert.SerializeObject(words);
+        string filePath = Path.Combine(Application.streamingAssetsPath, "Words", "words.json");
+        string jsonString = JsonConvert.SerializeObject(serialisableWordDictionaryData);
 
         File.WriteAllText(filePath, jsonString);
     }

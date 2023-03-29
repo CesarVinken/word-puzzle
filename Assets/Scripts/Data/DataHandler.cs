@@ -72,4 +72,30 @@ public class DataHandler
 
         return userGameDataModel;
     }
+
+    public Dictionary<char, List<string>> GetDictionaryData()
+    {
+        SerialisableWordDictionaryData serialisableWordDictionaryData = new JsonWordDictionaryDataReader().ReadData<SerialisableWordDictionaryData>();
+
+        ConsoleLog.Log(LogCategory.General, $"Loaded {serialisableWordDictionaryData.Words.Length} words");
+
+        Dictionary<char, List<string>> dictionaryWordsByLetter = new Dictionary<char, List<string>>();
+
+        for (int i = 0; i < serialisableWordDictionaryData.Words.Length; i++)
+        {
+            string word = serialisableWordDictionaryData.Words[i];
+            char firstChar = word[0];
+            if (dictionaryWordsByLetter.TryGetValue(firstChar, out List<string> words))
+            {
+                words.Add(word);
+            }
+            else
+            {
+                dictionaryWordsByLetter.Add(firstChar, new List<string>() { word });
+            }
+        }
+        ConsoleLog.Log(LogCategory.General, $"Completed writing dictionary with {dictionaryWordsByLetter.Count} letters");
+
+        return dictionaryWordsByLetter;
+    }
 }

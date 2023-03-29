@@ -35,7 +35,6 @@ public class WordScoreProjectionText : MonoBehaviour
         else
         {
             SetText($"");
-
         }
     }
 

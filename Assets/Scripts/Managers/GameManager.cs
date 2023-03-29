@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     private DataHandler _dataHandler;
     public LevelDataModel CurrentLevelData { get; private set; } = null;
 
+    public Dictionary<char, List<string>> WordDictionary { get; private set; }
+
     private SceneType _firstScene; // the start-up scene. If we load the Level scene first in Unity we need to load a level
 
     private void Awake()
@@ -51,6 +53,7 @@ public class GameManager : MonoBehaviour
         _dataHandler.Initialise();
         GameData = _dataHandler.GetGameData();
         UserData = _dataHandler.GetUserData();
+        WordDictionary = _dataHandler.GetDictionaryData();
 
         if(_firstScene == SceneType.Level) // this means this is a start up from the unity Level scene and we never selected a current level in the menu
         {

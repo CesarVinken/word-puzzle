@@ -273,6 +273,6 @@ MonoBehaviour:
   _button: {fileID: 7599752956721803308}
   _image: {fileID: 3647871075686118318}
   _characterText: {fileID: 5698967631531988910}
-  TileParent: {fileID: 0}
+  TileParents: []
   TileChildren: []
   State: 1
