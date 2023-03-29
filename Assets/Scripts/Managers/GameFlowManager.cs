@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class GameFlowManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class GameFlowManager : MonoBehaviour
 
     public PlayerActionHandler MoveHandler { get; private set; }
     public ValidationHandler ValidationHandler { get; private set; }
+    private AutoLevelSolver _autoLevelSolver;
 
     public event EventHandler<LetterPickEvent> LetterPickEvent;
     public event EventHandler<WordSubmitEvent> WordSubmitEvent;
@@ -22,9 +24,10 @@ public class GameFlowManager : MonoBehaviour
     public void Awake()
     {
         Instance = this;
-        ConsoleLog.Warning(LogCategory.General, $"Awake the flow manager");
+
         MoveHandler = new PlayerActionHandler();
         ValidationHandler = new ValidationHandler();
+        _autoLevelSolver = new AutoLevelSolver();
     }
 
     public void Start()
@@ -61,18 +64,24 @@ public class GameFlowManager : MonoBehaviour
         LetterPickActions.Add(e.LetterPickAction);
 
         string word = GetFormedWord();
-        ValidationHandler.Validate(word.ToLower());
+        ValidationHandler.Validate(word);
     }
 
     public void OnWordSubmitEvent(object sender, WordSubmitEvent e)
     {
         ClearActions();
-        bool levelEnded = CheckForLevelEnd();
 
-        if (levelEnded)
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+        bool formableWordLeft = CheckForLevelEnd();
+
+        if (!formableWordLeft)
         {
             LevelUIController.Instance.ShowEndGamePanel();
         }
+
+        stopwatch.Stop();
+        ConsoleLog.Log(LogCategory.General, $"Check took {stopwatch.ElapsedMilliseconds} milliseconds");
     }
 
     public void SetCurrentScore(int newScore)
@@ -106,7 +115,7 @@ public class GameFlowManager : MonoBehaviour
 
     private bool CheckForLevelEnd()
     {
-        return true;
+        return _autoLevelSolver.FormableWordsLeft();
     }
 
     #region events

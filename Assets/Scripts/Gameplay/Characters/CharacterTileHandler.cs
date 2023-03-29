@@ -56,7 +56,6 @@ public class CharacterTileHandler
         }
     }
 
-
     public void UndoLastTile()
     {
         LetterPickAction lastLetterPickAction = GameFlowManager.Instance.LetterPickActions[GameFlowManager.Instance.LetterPickActions.Count - 1];
@@ -65,7 +64,7 @@ public class CharacterTileHandler
         GameFlowManager.Instance.RemoveLastAction();
 
         string word = GameFlowManager.Instance.GetFormedWord();
-        GameFlowManager.Instance.ValidationHandler.Validate(word.ToLower());
+        GameFlowManager.Instance.ValidationHandler.Validate(word);
     }
 
     private CharacterTile CreateTile(CharacterTileDataModel characterTileData, GameObject characterTilePrefab, Transform container)
@@ -96,10 +95,5 @@ public class CharacterTileHandler
         }
 
         return tileChildren;
-    }
-
-    public void ClearTiles()
-    {
-        Tiles.Clear();
     }
 }

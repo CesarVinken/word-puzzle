@@ -5,4 +5,5 @@ public enum ColourType
     ErrorRed,
     DisabledGray,
     SelectedBackground,
+    Yellow,
 }

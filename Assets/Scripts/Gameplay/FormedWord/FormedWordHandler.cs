@@ -12,7 +12,6 @@ public class FormedWordHandler
 
     public void FillNextSlot(CharacterTile pickedCharacterTile)
     {
-        ConsoleLog.Warning(LogCategory.General, $"FillNextSlot");
         CharacterTileDataModel characterTileData = pickedCharacterTile.CharacterTileData;
         FormedWordCharacter formedWordCharacter = new FormedWordCharacter(characterTileData.Character);
 
@@ -21,7 +20,6 @@ public class FormedWordHandler
             FormedWordCharacterTile tile = _formedWordCharacters[i];
             if (tile.FormedWordCharacter == null)
             {
-                ConsoleLog.Warning(LogCategory.General, $"SetContent");
                 tile.SetContent(formedWordCharacter);
                 break;
             }

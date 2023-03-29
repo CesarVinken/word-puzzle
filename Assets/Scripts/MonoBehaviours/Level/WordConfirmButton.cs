@@ -18,6 +18,8 @@ public class WordConfirmButton : MonoBehaviour, ILevelUIButton
 
     public void Initialise()
     {
+        _button.interactable = false;
+
         GameFlowManager.Instance.WordValidatedEvent += OnWordValidatedEvent;
         GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
     }

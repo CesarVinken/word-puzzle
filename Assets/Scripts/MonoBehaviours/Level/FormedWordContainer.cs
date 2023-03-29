@@ -8,7 +8,6 @@ public class FormedWordContainer : MonoBehaviour
 
     public void Setup()
     {
-        ConsoleLog.Warning(LogCategory.General, $"Setup");
         if(_formedWordCharacters.Count == 0)
         {
             ConsoleLog.Error(LogCategory.Initialisation, $"Could nog find any slots to form a word");
@@ -22,7 +21,6 @@ public class FormedWordContainer : MonoBehaviour
 
     public void Initialise()
     {
-        ConsoleLog.Warning(LogCategory.General, $"Initialise. {_formedWordCharacters.Count} _formedWordCharacters");
         _formedWordHandler = new FormedWordHandler(_formedWordCharacters);
 
         GameFlowManager.Instance.LetterPickEvent += OnLetterPickEvent;

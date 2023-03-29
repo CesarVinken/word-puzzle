@@ -34,6 +34,8 @@ public class ColourUtility
                 return "#69FDFF";
             case ColourType.DisabledGray:
                 return "#919191";
+            case ColourType.Yellow:
+                return "#FFF26C";
             default:
                 new NotImplementedException("ColourType", colourType.ToString());
                 return "#000000";

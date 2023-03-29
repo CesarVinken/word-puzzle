@@ -43,6 +43,7 @@ public class DictionaryCleanupHandler
         for (int i = 0; i < filteredWords.Length; i++)
         {
             filteredWords[i] = filteredWords[i].Replace("\r", "");
+            filteredWords[i] = filteredWords[i].ToUpper();
         }
 
         ConsoleLog.Log(LogCategory.General, $"Added {filteredWords.Length} words to the filtered word list.");

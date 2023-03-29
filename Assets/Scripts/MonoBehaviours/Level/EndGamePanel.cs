@@ -30,19 +30,15 @@ public class EndGamePanel : MonoBehaviour
 
     public void Initialise()
     {
-        int currentLevelId = GameManager.Instance.CurrentLevelData.LevelNumber;
-        UserLevelDataModel userLevelData = GameManager.Instance.UserData.Levels[currentLevelId - 1];
-        int highScore = userLevelData.HighScore;
-        int levelScore = GameFlowManager.Instance.CurrentScore;
+        SetHighScoreText();
+        SetScoreCalculationText();
+    }
 
+    private void SetHighScoreText()
+    {
+        int highScore = GetHighScore();
 
-        int tilesLeft = CharacterTileHandler.Tiles.Where(t => t.State != CharacterTileState.Used).Count();
-        int penaltyPerTile = 100;
-        int tilesPenalty = tilesLeft * penaltyPerTile;
-        int totalScore = levelScore - tilesPenalty;
-        string tilesPenaltyString = tilesPenalty == 0 ? "0" : $"-{tilesPenalty}";
-
-        if(highScore > 0)
+        if (highScore > 0)
         {
             _highScoreText.text = $"Current high score: {highScore}";
         }
@@ -50,8 +46,35 @@ public class EndGamePanel : MonoBehaviour
         {
             _highScoreText.text = $"";
         }
+    }
+
+    private void SetScoreCalculationText()
+    {
+        int levelScore = GameFlowManager.Instance.CurrentScore;
+        int tilesPenalty = GetTilesPenalty();
+        int totalScore = levelScore - tilesPenalty;
+
+        string tilesPenaltyString = tilesPenalty == 0 ? "0" : $"-{tilesPenalty}";
 
         _scoreCalculationText.text = $"Level score: {levelScore}\nTiles remaining: {tilesPenaltyString}\n--------\nTotal Score: {totalScore}";
+    }
+
+    private int GetTilesPenalty()
+    {
+        int levelScore = GameFlowManager.Instance.CurrentScore;
+        int tilesLeft = CharacterTileHandler.Tiles.Where(t => t.State != CharacterTileState.Used).Count();
+        int penaltyPerTile = 100;
+
+        int tilesPenalty = tilesLeft * penaltyPerTile;
+
+        return tilesPenalty;
+    }
+
+    private int GetHighScore()
+    {
+        int currentLevelId = GameManager.Instance.CurrentLevelData.LevelNumber;
+        UserLevelDataModel userLevelData = GameManager.Instance.UserData.Levels[currentLevelId - 1];
+        return userLevelData.HighScore;
     }
 
     public void OnClick()
