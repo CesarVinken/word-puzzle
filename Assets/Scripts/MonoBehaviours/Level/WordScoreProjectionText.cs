@@ -19,12 +19,18 @@ public class WordScoreProjectionText : MonoBehaviour
         GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
     }
 
+    public void Unload()
+    {
+        GameFlowManager.Instance.WordValidatedEvent -= OnWordValidatedEvent;
+        GameFlowManager.Instance.WordSubmitEvent -= OnWordSubmitEvent;
+    }
+
     private void SetText(string newText)
     {
         _wordScoreProjectionText.text = newText;
     }
 
-    public void OnWordValidatedEvent(object sender, WordValidatedEvent e)
+    private void OnWordValidatedEvent(object sender, WordValidatedEvent e)
     {
         if (e.IsValid)
         {
@@ -38,7 +44,7 @@ public class WordScoreProjectionText : MonoBehaviour
         }
     }
 
-    public void OnWordSubmitEvent(object sender, WordSubmitEvent e)
+    private void OnWordSubmitEvent(object sender, WordSubmitEvent e)
     {
         SetText($"");
     }

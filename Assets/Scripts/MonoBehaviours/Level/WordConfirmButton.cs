@@ -22,6 +22,12 @@ public class WordConfirmButton : MonoBehaviour, ILevelUIButton
         GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
     }
 
+    public void Unload()
+    {
+        GameFlowManager.Instance.WordValidatedEvent -= OnWordValidatedEvent;
+        GameFlowManager.Instance.WordSubmitEvent -= OnWordSubmitEvent;
+    }
+
     public void OnWordValidatedEvent(object sender, WordValidatedEvent e)
     {
         _button.interactable = e.IsValid;

@@ -60,6 +60,19 @@ public class LevelUIController : MonoBehaviour
 
         Instance = this;
 
+    }
+
+    private void Start()
+    {
+        if (!GameManager.LevelDirectlyFromInspector)
+        {
+            Setup();
+            Initialise();
+        }
+    }
+
+    public void Setup()
+    {
         _undoButton.Setup();
         _wordConfirmButton.Setup();
         _settingsMenuButton.Setup();
@@ -69,31 +82,41 @@ public class LevelUIController : MonoBehaviour
         _formedWordContainer.Setup();
         _characterTileContainer.Setup();
 
-        if (GameManager.Instance.CurrentLevelData != null) // if we open the Level scene from the Unity inspector, initialisation is triggered through the GameManager
-        {
-            Initialise();
-        }
     }
-
 
     public void Initialise()
     {
         _levelNameText.text = GameManager.Instance.CurrentLevelData.Title;
 
         _currentScoreText.Initialise();
-        _undoButton.Initialise();
-        _wordConfirmButton.Initialise();
-        _settingsMenuButton.Initialise();
-
         _wordScoreProjection.Initialise();
         _formedWordContainer.Initialise();
         _characterTileContainer.Initialise();
 
+        _undoButton.Initialise();
+        _wordConfirmButton.Initialise();
+        _settingsMenuButton.Initialise();
+
         GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
+    }
+
+    private void Unload()
+    {
+        GameFlowManager.Instance.WordSubmitEvent -= OnWordSubmitEvent;
+
+        GameFlowManager.Instance.Unload();
+
+        _formedWordContainer.Unload();
+        _wordScoreProjection.Unload();
+        _characterTileContainer.Unload();
+
+        _undoButton.Unload();
+        _wordConfirmButton.Unload();
     }
 
     public void ToLevelSelection()
     {
+        Unload();
         GameManager.Instance.ToLevelSelection();
     }
 

@@ -6,7 +6,7 @@ public class GameFlowManager : MonoBehaviour
 {
     public static GameFlowManager Instance;
 
-    public List<LetterPickAction> LastLetterPickActions = new List<LetterPickAction>();
+    public List<LetterPickAction> LetterPickActions = new List<LetterPickAction>();
     public Dictionary<int, CharacterTile> TilesById { get; private set; }  = new Dictionary<int, CharacterTile>();
     public int CurrentScore { get; private set; }
 
@@ -22,7 +22,7 @@ public class GameFlowManager : MonoBehaviour
     public void Awake()
     {
         Instance = this;
-
+        ConsoleLog.Warning(LogCategory.General, $"Awake the flow manager");
         MoveHandler = new PlayerActionHandler();
         ValidationHandler = new ValidationHandler();
     }
@@ -33,6 +33,12 @@ public class GameFlowManager : MonoBehaviour
         WordSubmitEvent += OnWordSubmitEvent;
     }
 
+    public void Unload()
+    {
+        LetterPickEvent -= OnLetterPickEvent;
+        WordSubmitEvent -= OnWordSubmitEvent;
+    }
+
     public void SetTilesById(Dictionary<int, CharacterTile> tilesById)
     {
         TilesById = tilesById;
@@ -40,17 +46,19 @@ public class GameFlowManager : MonoBehaviour
 
     public void RemoveLastAction()
     {
-    // todo
+        if (LetterPickActions.Count == 0) return;
+
+        LetterPickActions.RemoveAt(LetterPickActions.Count - 1);
     }
 
     private void ClearActions()
     {
-        LastLetterPickActions.Clear();
+        LetterPickActions.Clear();
     }
 
     public void OnLetterPickEvent(object sender, LetterPickEvent e)
     {
-        LastLetterPickActions.Add(e.LetterPickAction);
+        LetterPickActions.Add(e.LetterPickAction);
 
         string word = GetFormedWord();
         ValidationHandler.Validate(word.ToLower());
@@ -69,9 +77,9 @@ public class GameFlowManager : MonoBehaviour
     public string GetFormedWord()
     {
         string word = "";
-        for (int i = 0; i < LastLetterPickActions.Count; i++)
+        for (int i = 0; i < LetterPickActions.Count; i++)
         {
-            word += LastLetterPickActions[i].CharacterTile.CharacterTileData.Character;
+            word += LetterPickActions[i].CharacterTile.CharacterTileData.Character;
         }
 
         return word;
@@ -118,4 +126,3 @@ public class GameFlowManager : MonoBehaviour
 
     #endregion
 }
-

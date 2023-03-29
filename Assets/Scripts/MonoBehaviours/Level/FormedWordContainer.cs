@@ -4,11 +4,15 @@ using UnityEngine;
 public class FormedWordContainer : MonoBehaviour
 {
     private FormedWordHandler _formedWordHandler;
-    [SerializeField] List<FormedWordCharacterTile> _formedWordCharacters = new List<FormedWordCharacterTile>();
+    [SerializeField] private List<FormedWordCharacterTile> _formedWordCharacters = new List<FormedWordCharacterTile>();
 
     public void Setup()
     {
-        _formedWordHandler = new FormedWordHandler();
+        ConsoleLog.Warning(LogCategory.General, $"Setup");
+        if(_formedWordCharacters.Count == 0)
+        {
+            ConsoleLog.Error(LogCategory.Initialisation, $"Could nog find any slots to form a word");
+        }
 
         for (int i = 0; i < _formedWordCharacters.Count; i++)
         {
@@ -18,42 +22,34 @@ public class FormedWordContainer : MonoBehaviour
 
     public void Initialise()
     {
-        GameFlowManager.Instance.LetterPickEvent += OnPlayerMoveEvent;
+        ConsoleLog.Warning(LogCategory.General, $"Initialise. {_formedWordCharacters.Count} _formedWordCharacters");
+        _formedWordHandler = new FormedWordHandler(_formedWordCharacters);
+
+        GameFlowManager.Instance.LetterPickEvent += OnLetterPickEvent;
         GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
         GameFlowManager.Instance.UndoEvent += OnUndoEvent;
     }
 
-    public void RemoveLetter(FormedWordCharacterTile formedWordCharacterTile)
+    public void Unload()
     {
-        formedWordCharacterTile.SetContent(null);
+        GameFlowManager.Instance.LetterPickEvent -= OnLetterPickEvent;
+        GameFlowManager.Instance.WordSubmitEvent -= OnWordSubmitEvent;
+        GameFlowManager.Instance.UndoEvent -= OnUndoEvent;
     }
 
-    public void OnPlayerMoveEvent(object sender, LetterPickEvent e)
+    private void OnLetterPickEvent(object sender, LetterPickEvent e)
     {
-        CharacterTileDataModel characterTileData = e.LetterPickAction.CharacterTile.CharacterTileData;
-        FormedWordCharacter formedWordCharacter = new FormedWordCharacter(characterTileData.Character);
-
-        for (int i = 0; i < _formedWordCharacters.Count; i++)
-        {
-            FormedWordCharacterTile tile = _formedWordCharacters[i];
-            if (tile.FormedWordCharacter == null)
-            {
-                tile.SetContent(formedWordCharacter);
-                break;
-            }
-        }
+        ConsoleLog.Warning(LogCategory.General, $"FillNextSlot!");
+        _formedWordHandler.FillNextSlot(e.LetterPickAction.CharacterTile);
     }
 
-    public void OnWordSubmitEvent(object sender, WordSubmitEvent e)
+    private void OnWordSubmitEvent(object sender, WordSubmitEvent e)
     {
-        for (int i = _formedWordCharacters.Count - 1; i >= 0; i--)
-        {
-            RemoveLetter(_formedWordCharacters[i]);
-        }
+        _formedWordHandler.RemoveFormedWord();
     }
 
-    public void OnUndoEvent(object sender, UndoEvent e)
+    private void OnUndoEvent(object sender, UndoEvent e)
     {
-        ConsoleLog.Log(LogCategory.General, $"todo");
+        _formedWordHandler.RemoveLastLetter();
     }
 }

@@ -18,35 +18,42 @@ public class UndoButton : MonoBehaviour, ILevelUIButton
 
     public void Initialise()
     {
-        _button.interactable = false;
+        SetButtonInteractability(false);
 
         GameFlowManager.Instance.LetterPickEvent += OnLetterPickEvent;
         GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
-        GameFlowManager.Instance.UndoEvent += OnUndoEvent;
+    }
+
+    public void Unload()
+    {
+        GameFlowManager.Instance.LetterPickEvent -= OnLetterPickEvent;
+        GameFlowManager.Instance.WordSubmitEvent -= OnWordSubmitEvent;
     }
 
     public void OnLetterPickEvent(object sender, LetterPickEvent e)
     {
-        _button.interactable = true;
+        SetButtonInteractability(true);
     }
 
     public void OnWordSubmitEvent(object sender, WordSubmitEvent e)
     {
-        _button.interactable = false;
+        SetButtonInteractability(false);
     }
-    
-    public void OnUndoEvent(object sender, UndoEvent e)
+
+    private void SetButtonInteractability(bool isInteractable)
     {
-
-        ConsoleLog.Log(LogCategory.General, $"todo");
+        _button.interactable = isInteractable;
     }
-
-
+   
     public void OnClick()
     {
-        GameFlowManager.Instance.MoveHandler.UndoTile();
+        // if after the undo action there are 0 actions left, then the button should not be interactable
+        if (GameFlowManager.Instance.LetterPickActions.Count < 2) 
+        {
+            SetButtonInteractability(false);
+        }
 
-        // if there are no picked letters left, make button not uninteractable
+        GameFlowManager.Instance.MoveHandler.UndoTile();
     }
 
 }

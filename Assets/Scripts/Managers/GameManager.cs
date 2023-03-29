@@ -1,22 +1,19 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public static bool LevelDirectlyFromInspector = false;
     public GameDataModel GameData { get; private set; }
     public UserGameDataModel UserData { get; private set; }
-    
+
     private DataHandler _dataHandler;
     public LevelDataModel CurrentLevelData { get; private set; } = null;
 
     public Dictionary<char, List<string>> WordDictionary { get; private set; }
-
-    private SceneType _firstScene; // the start-up scene. If we load the Level scene first in Unity we need to load a level
+    public SceneType FirstScene {get; private set; } // the start-up scene. If we load the Level scene first in Unity we need to load a level
 
     private void Awake()
     {
@@ -37,10 +34,12 @@ public class GameManager : MonoBehaviour
         switch (sceneName)
         {
             case "Title":
-                _firstScene = SceneType.Title;
+                LevelDirectlyFromInspector = false;
+                FirstScene = SceneType.Title;
                 break;
             case "Level":
-                _firstScene = SceneType.Level;
+                LevelDirectlyFromInspector = true;
+                FirstScene = SceneType.Level;
                 break;
             default:
                 throw new NotImplementedException("SceneName", sceneName);
@@ -55,7 +54,7 @@ public class GameManager : MonoBehaviour
         UserData = _dataHandler.GetUserData();
         WordDictionary = _dataHandler.GetDictionaryData();
 
-        if(_firstScene == SceneType.Level) // this means this is a start up from the unity Level scene and we never selected a current level in the menu
+        if(FirstScene == SceneType.Level) // this means this is a start up from the unity Level scene and we never selected a current level in the menu
         {
             SetCurrentLevel(GameData.Levels[0]);
 
@@ -64,6 +63,7 @@ public class GameManager : MonoBehaviour
                 ConsoleLog.Error(LogCategory.General, $"Could not find the Instance of the LevelUIController");
             }
 
+            LevelUIController.Instance.Setup();
             LevelUIController.Instance.Initialise();
         }
     }
@@ -84,6 +84,8 @@ public class GameManager : MonoBehaviour
 
     public void ToLevelSelection()
     {
+        LevelDirectlyFromInspector = false;
+
         SetCurrentLevel(null);
         SceneManager.LoadScene("Title");
     }

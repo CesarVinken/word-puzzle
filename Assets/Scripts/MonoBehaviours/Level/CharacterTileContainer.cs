@@ -18,8 +18,13 @@ public class CharacterTileContainer : MonoBehaviour
         GameFlowManager.Instance.UndoEvent += OnUndoEvent;
     }
 
+    public void Unload()
+    {
+        GameFlowManager.Instance.UndoEvent -= OnUndoEvent;
+    }
+
     public void OnUndoEvent(object sender, UndoEvent e)
     {
-        ConsoleLog.Log(LogCategory.General, $"todo");
+        _characterTileHandler.UndoLastTile();
     }
 }

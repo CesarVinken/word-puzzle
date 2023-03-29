@@ -101,7 +101,9 @@ public class CharacterTile : MonoBehaviour
         {
             if(TileChildren[i].State != CharacterTileState.Blocked)
             {
-                TileChildren[i].Block();
+                CharacterTile childTile = TileChildren[i];
+                childTile.Block();
+                childTile.State = CharacterTileState.Blocked;
             }
         }
     }
@@ -125,25 +127,25 @@ public class CharacterTile : MonoBehaviour
             if (hasBlockingParent) continue;
 
             childTile.Open();
-            childTile.SetCharacterTileState(CharacterTileState.Open);
+            childTile.State = CharacterTileState.Open;
         }
     }
 
-    public void Block()
+    private void Block()
     {
         _image.color = ColourUtility.GetColour(ColourType.DisabledGray);
 
         gameObject.SetActive(true);
     }
 
-    public void Open()
+    private void Open()
     {
         _image.color = ColourUtility.GetColour(ColourType.Empty);
-     
+
         gameObject.SetActive(true);
     }
 
-    public void Use()
+    private void Use()
     {
         gameObject.SetActive(false);
     }
@@ -152,7 +154,7 @@ public class CharacterTile : MonoBehaviour
     {
         if (State != CharacterTileState.Open) return;
 
-        if (GameFlowManager.Instance.LastLetterPickActions.Count >= 7) return; // the player cannot do more moves if the number of moves equals the maximum word length
+        if (GameFlowManager.Instance.LetterPickActions.Count >= 7) return; // the player cannot do more moves if the number of moves equals the maximum word length
 
         ConsoleLog.Log(LogCategory.General, $"Add {_characterText.text} to word", LogPriority.Normal);
         GameFlowManager.Instance.MoveHandler.UseTile(this);
