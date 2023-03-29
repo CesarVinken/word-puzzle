@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerActionHandler
@@ -9,9 +7,9 @@ public class PlayerActionHandler
         new LetterPickAction(characterTile).Execute();
     }
 
-    public static void UndoTile(CharacterTile characterTile)
+    public void UndoTile()
     {
-        // TO do
+        new UndoAction().Execute();
     }
 
     public void SubmitWord()

@@ -16,6 +16,7 @@ public class GameFlowManager : MonoBehaviour
     public event EventHandler<LetterPickEvent> LetterPickEvent;
     public event EventHandler<WordSubmitEvent> WordSubmitEvent;
     public event EventHandler<WordValidatedEvent> WordValidatedEvent;
+    public event EventHandler<UndoEvent> UndoEvent;
 
 
     public void Awake()
@@ -107,6 +108,12 @@ public class GameFlowManager : MonoBehaviour
     {
         ConsoleLog.Log(LogCategory.Events, $"Execute WordValidatedEvent");
         WordValidatedEvent?.Invoke(this, new WordValidatedEvent(isValid));
+    }
+
+    public void ExecuteUndoEvent(UndoAction undoAction)
+    {
+        ConsoleLog.Log(LogCategory.Events, $"Execute Word UndoEvent");
+        UndoEvent?.Invoke(this, new UndoEvent(undoAction));
     }
 
     #endregion

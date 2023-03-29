@@ -14,6 +14,12 @@ public class CharacterTileContainer : MonoBehaviour
     {
         _characterTileHandler.PopulateLevel(transform);
         _characterTileHandler.SortTiles(transform);
-        
+
+        GameFlowManager.Instance.UndoEvent += OnUndoEvent;
+    }
+
+    public void OnUndoEvent(object sender, UndoEvent e)
+    {
+        ConsoleLog.Log(LogCategory.General, $"todo");
     }
 }

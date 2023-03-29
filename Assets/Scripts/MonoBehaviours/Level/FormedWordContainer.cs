@@ -20,6 +20,7 @@ public class FormedWordContainer : MonoBehaviour
     {
         GameFlowManager.Instance.LetterPickEvent += OnPlayerMoveEvent;
         GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
+        GameFlowManager.Instance.UndoEvent += OnUndoEvent;
     }
 
     public void RemoveLetter(FormedWordCharacterTile formedWordCharacterTile)
@@ -49,5 +50,10 @@ public class FormedWordContainer : MonoBehaviour
         {
             RemoveLetter(_formedWordCharacters[i]);
         }
+    }
+
+    public void OnUndoEvent(object sender, UndoEvent e)
+    {
+        ConsoleLog.Log(LogCategory.General, $"todo");
     }
 }

@@ -22,6 +22,7 @@ public class UndoButton : MonoBehaviour, ILevelUIButton
 
         GameFlowManager.Instance.LetterPickEvent += OnLetterPickEvent;
         GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
+        GameFlowManager.Instance.UndoEvent += OnUndoEvent;
     }
 
     public void OnLetterPickEvent(object sender, LetterPickEvent e)
@@ -33,11 +34,17 @@ public class UndoButton : MonoBehaviour, ILevelUIButton
     {
         _button.interactable = false;
     }
+    
+    public void OnUndoEvent(object sender, UndoEvent e)
+    {
+
+        ConsoleLog.Log(LogCategory.General, $"todo");
+    }
 
 
     public void OnClick()
     {
-        // undo
+        GameFlowManager.Instance.MoveHandler.UndoTile();
 
         // if there are no picked letters left, make button not uninteractable
     }

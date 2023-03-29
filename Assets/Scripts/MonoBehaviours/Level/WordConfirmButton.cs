@@ -24,15 +24,12 @@ public class WordConfirmButton : MonoBehaviour, ILevelUIButton
 
     public void OnWordValidatedEvent(object sender, WordValidatedEvent e)
     {
-        _button.interactable = true;
-        // if valid, make button clickable.
-        // if not valid, make button unclickable
+        _button.interactable = e.IsValid;
     }
 
     public void OnWordSubmitEvent(object sender, WordSubmitEvent e)
     {
         _button.interactable = false;
-        // make button unclickable
     }
 
 
