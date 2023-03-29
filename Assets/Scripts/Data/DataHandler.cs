@@ -73,6 +73,14 @@ public class DataHandler
         return userGameDataModel;
     }
 
+    public void SaveUserLevelData()
+    {
+        JsonUserLevelDataWriter fileWriter = new JsonUserLevelDataWriter();
+
+        SerialisableUserGameData serialisableUserGameData = GameManager.Instance.UserData.Serialise();
+        fileWriter.WriteData(serialisableUserGameData);
+    }
+
     public Dictionary<char, List<string>> GetDictionaryData()
     {
         SerialisableWordDictionaryData serialisableWordDictionaryData = new JsonWordDictionaryDataReader().ReadData<SerialisableWordDictionaryData>();

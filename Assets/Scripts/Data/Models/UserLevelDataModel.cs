@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 public class UserLevelDataModel
 {
     public int LevelNumber { get; private set; }
@@ -8,6 +6,11 @@ public class UserLevelDataModel
     public UserLevelDataModel(int levelNumber, int highScore)
     {
         LevelNumber = levelNumber;
+        HighScore = highScore;
+    }
+
+    public void SetHighScore(int highScore)
+    {
         HighScore = highScore;
     }
 

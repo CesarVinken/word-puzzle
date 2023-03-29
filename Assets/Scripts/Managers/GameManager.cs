@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -88,5 +89,11 @@ public class GameManager : MonoBehaviour
 
         SetCurrentLevel(null);
         SceneManager.LoadScene("Title");
+    }
+
+    public void SaveNewHighScore(int highScore)
+    {
+        UserData.Levels[CurrentLevelData.LevelNumber - 1].SetHighScore(highScore);
+        _dataHandler.SaveUserLevelData();
     }
 }

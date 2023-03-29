@@ -5,6 +5,8 @@ public class LevelUIController : MonoBehaviour
 {
     public static LevelUIController Instance;
 
+    [SerializeField] private CelebrationScreen _celebrationScreen;
+
     [SerializeField] private TextMeshProUGUI _levelNameText;
     [SerializeField] private TextMeshProUGUI _submittedWordsText;
 
@@ -20,6 +22,11 @@ public class LevelUIController : MonoBehaviour
 
     public void Awake()
     {
+        if (_celebrationScreen == null)
+        {
+            ConsoleLog.Error(LogCategory.General, $"Could not find _celebrationScreen");
+        }
+        
         if (_levelNameText == null)
         {
             ConsoleLog.Error(LogCategory.General, $"Could not find level name text on {gameObject.name}");
@@ -78,6 +85,7 @@ public class LevelUIController : MonoBehaviour
         _wordConfirmButton.Setup();
         _settingsMenuButton.Setup();
 
+        _celebrationScreen.Setup();
         _currentScoreText.Setup();
         _wordScoreProjection.Setup();
         _formedWordContainer.Setup();
@@ -89,6 +97,7 @@ public class LevelUIController : MonoBehaviour
         _levelNameText.text = GameManager.Instance.CurrentLevelData.Title;
 
         _currentScoreText.Initialise();
+        _celebrationScreen.Initialise();
         _wordScoreProjection.Initialise();
         _formedWordContainer.Initialise();
         _characterTileContainer.Initialise();
@@ -118,6 +127,13 @@ public class LevelUIController : MonoBehaviour
     {
         Unload();
         GameManager.Instance.ToLevelSelection();
+    }
+
+    public void ToCelebration()
+    {
+        _celebrationScreen.SetHighScoreText();
+        _celebrationScreen.gameObject.SetActive(true);
+        _celebrationScreen.StartCelebration();
     }
 
     public void ShowEndGamePanel()

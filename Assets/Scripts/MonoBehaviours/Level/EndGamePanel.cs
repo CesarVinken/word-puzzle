@@ -9,6 +9,9 @@ public class EndGamePanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _scoreCalculationText;
     [SerializeField] private Button _button;
 
+    private int _totalScore = 0;
+    private int _currentHighScore = 0;
+
     public void Setup()
     {
         if(_highScoreText == null)
@@ -36,11 +39,11 @@ public class EndGamePanel : MonoBehaviour
 
     private void SetHighScoreText()
     {
-        int highScore = GetHighScore();
+        _currentHighScore = GetCurrentHighScore();
 
-        if (highScore > 0)
+        if (_currentHighScore > 0)
         {
-            _highScoreText.text = $"Current high score: {highScore}";
+            _highScoreText.text = $"Current high score: {_currentHighScore}";
         }
         else
         {
@@ -52,11 +55,11 @@ public class EndGamePanel : MonoBehaviour
     {
         int levelScore = GameFlowManager.Instance.CurrentScore;
         int tilesPenalty = GetTilesPenalty();
-        int totalScore = levelScore - tilesPenalty;
+        _totalScore = levelScore - tilesPenalty;
 
         string tilesPenaltyString = tilesPenalty == 0 ? "0" : $"-{tilesPenalty}";
 
-        _scoreCalculationText.text = $"Level score: {levelScore}\nTiles remaining: {tilesPenaltyString}\n--------\nTotal Score: {totalScore}";
+        _scoreCalculationText.text = $"Level score: {levelScore}\nTiles remaining: {tilesPenaltyString}\n--------\nTotal Score: {_totalScore}";
     }
 
     private int GetTilesPenalty()
@@ -70,7 +73,7 @@ public class EndGamePanel : MonoBehaviour
         return tilesPenalty;
     }
 
-    private int GetHighScore()
+    private int GetCurrentHighScore()
     {
         int currentLevelId = GameManager.Instance.CurrentLevelData.LevelNumber;
         UserLevelDataModel userLevelData = GameManager.Instance.UserData.Levels[currentLevelId - 1];
@@ -79,7 +82,14 @@ public class EndGamePanel : MonoBehaviour
 
     public void OnClick()
     {
-        ConsoleLog.Log(LogCategory.General, $"to do: save high score or unlock level");
-        LevelUIController.Instance.ToLevelSelection();
+        if(_totalScore > _currentHighScore)
+        {
+            GameManager.Instance.SaveNewHighScore(_totalScore);
+            LevelUIController.Instance.ToCelebration();
+        }
+        else
+        {
+            LevelUIController.Instance.ToLevelSelection();
+        }
     }
 }
