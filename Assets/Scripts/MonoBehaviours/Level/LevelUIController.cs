@@ -72,7 +72,7 @@ public class LevelUIController : MonoBehaviour
 
     private void Start()
     {
-        if (!GameManager.LevelDirectlyFromInspector)
+        if (GameManager.Instance.PreviousScene != SceneType.None)
         {
             Setup();
             Initialise();

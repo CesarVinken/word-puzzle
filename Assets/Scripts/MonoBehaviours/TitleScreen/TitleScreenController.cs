@@ -28,8 +28,17 @@ public class TitleScreenController : MonoBehaviour
 
     private void Start()
     {
-        _titleView.Initialise();
-        SetCurrentView(_titleView);
+
+        if(GameManager.Instance.PreviousScene == SceneType.None)
+        {
+            _titleView.Initialise();
+            SetCurrentView(_titleView);
+        }
+        else
+        {
+            _levelSelectionView.Initialise();
+            SetCurrentView(_levelSelectionView);
+        }
     }
 
     public void ToLevel(LevelDataModel levelData)
