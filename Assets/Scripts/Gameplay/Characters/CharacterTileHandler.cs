@@ -3,20 +3,20 @@ using System.Linq;
 using UnityEngine;
 public class CharacterTileHandler
 {
-    private List<CharacterTile> _tiles = new List<CharacterTile>();
+    public static List<CharacterTile> Tiles = new List<CharacterTile>();
 
     public void PopulateLevel(Transform container)
     {
         List<CharacterTileDataModel> characterTileDatas = GameManager.Instance.CurrentLevelData.LetterTiles;
         GameObject characterTilePrefab = AssetManager.Instance.GetCharacterTilePrefab();
         Dictionary<int, CharacterTile> tilesById = new Dictionary<int, CharacterTile>();
-        _tiles = new List<CharacterTile>();
+        Tiles = new List<CharacterTile>();
 
         for (int i = 0; i < characterTileDatas.Count; i++)
         {
             CharacterTile characterTile = CreateTile(characterTileDatas[i], characterTilePrefab, container);
             tilesById.Add(characterTile.Id, characterTile);
-            _tiles.Add(characterTile);
+            Tiles.Add(characterTile);
         }
 
         GameFlowManager.Instance.SetTilesById(tilesById);
@@ -55,6 +55,7 @@ public class CharacterTileHandler
             child.SetAsLastSibling();
         }
     }
+
 
     public void UndoLastTile()
     {
@@ -95,5 +96,10 @@ public class CharacterTileHandler
         }
 
         return tileChildren;
+    }
+
+    public void ClearTiles()
+    {
+        Tiles.Clear();
     }
 }

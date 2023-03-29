@@ -67,6 +67,12 @@ public class GameFlowManager : MonoBehaviour
     public void OnWordSubmitEvent(object sender, WordSubmitEvent e)
     {
         ClearActions();
+        bool levelEnded = CheckForLevelEnd();
+
+        if (levelEnded)
+        {
+            LevelUIController.Instance.ShowEndGamePanel();
+        }
     }
 
     public void SetCurrentScore(int newScore)
@@ -96,6 +102,11 @@ public class GameFlowManager : MonoBehaviour
         }
 
         return score * (word.Length * 10);
+    }
+
+    private bool CheckForLevelEnd()
+    {
+        return true;
     }
 
     #region events

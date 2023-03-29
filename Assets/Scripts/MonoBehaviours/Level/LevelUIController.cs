@@ -12,6 +12,7 @@ public class LevelUIController : MonoBehaviour
     [SerializeField] private WordScoreProjectionText _wordScoreProjection;
     [SerializeField] private FormedWordContainer _formedWordContainer;
     [SerializeField] private CharacterTileContainer _characterTileContainer;
+    [SerializeField] private EndGamePanel _endGamePanel;
 
     [SerializeField] private UndoButton _undoButton;
     [SerializeField] private WordConfirmButton _wordConfirmButton;
@@ -81,7 +82,6 @@ public class LevelUIController : MonoBehaviour
         _wordScoreProjection.Setup();
         _formedWordContainer.Setup();
         _characterTileContainer.Setup();
-
     }
 
     public void Initialise()
@@ -118,6 +118,13 @@ public class LevelUIController : MonoBehaviour
     {
         Unload();
         GameManager.Instance.ToLevelSelection();
+    }
+
+    public void ShowEndGamePanel()
+    {
+        _endGamePanel.gameObject.SetActive(true);
+        _endGamePanel.Setup();
+        _endGamePanel.Initialise();
     }
 
     public void OnWordSubmitEvent(object sender, WordSubmitEvent e)
