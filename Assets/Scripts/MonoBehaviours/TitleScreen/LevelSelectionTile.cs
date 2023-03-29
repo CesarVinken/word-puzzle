@@ -74,20 +74,24 @@ public class LevelSelectionTile : MonoBehaviour
 
     private void SetPlayButton(int levelNumber, int highScore)
     {
-        // A level is playable if it is the first level or when it has any high score
-        if (highScore > -1 || levelNumber == 1)
+        if(levelNumber == 1) // level one is always playable
         {
             _levelButtonAvailableGO.SetActive(true);
             _levelButtonLockedGO.SetActive(false);
+            return;
         }
-        else
-        {
-            _levelButtonAvailableGO.SetActive(false);
-            _levelButtonLockedGO.SetActive(true);
-        }
-    }
-}
 
-public class LevelSelectionTileHandler
-{
+        int previousLevelScore = GameManager.Instance.UserData.Levels[levelNumber - 2].HighScore;
+
+        // A level is playable if it has any high score or if the previous level has a high score
+        if (highScore > -1 || previousLevelScore > -1)
+        {
+            _levelButtonAvailableGO.SetActive(true);
+            _levelButtonLockedGO.SetActive(false);
+            return;
+        }
+
+        _levelButtonAvailableGO.SetActive(false);
+        _levelButtonLockedGO.SetActive(true);
+    }
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class LevelSelectionView : MonoBehaviour, ITitleScreenView
 {
     [SerializeField] private GameObject _levelSelectionTilePrefab;
-    //private List<LevelSelectionTile> _levelSelectionTiles = new List<LevelSelectionTile>();
 
     [SerializeField] private Transform _tilesContainer;
 
