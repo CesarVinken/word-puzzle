@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UserGameDataModel
 {
-    public List<UserLevelDataModel> Levels;
+    public List<UserLevelDataModel> Levels { get; private set; }
 
     public UserGameDataModel(List<UserLevelDataModel> levels)
     {

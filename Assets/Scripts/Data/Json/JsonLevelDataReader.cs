@@ -31,7 +31,7 @@ public class JsonLevelDataReader : IJsonFileReader
         {
             if (!File.Exists(filePath))
             {
-                throw new Exception($"File {levelName}.json doesn't exist.");
+                throw new Exception($"File {levelName} doesn't exist.");
             }
 
             return File.ReadAllText(filePath);

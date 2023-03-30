@@ -76,9 +76,8 @@ public class FormableWordChecker
             {
                 CharacterTile parent = parents[i];
 
-                // a child cannot be its own parent
-                if (child == parent) continue;
-
+                
+                if (child == parent) continue; // a child cannot be its own parent
                 if (parent.State == CharacterTileState.Used) continue;
 
                 // the child can only be added if the parent already appears in the subset

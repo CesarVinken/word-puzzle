@@ -102,7 +102,6 @@ public class DataHandler
                 dictionaryWordsByLetter.Add(firstChar, new List<string>() { word });
             }
         }
-        ConsoleLog.Log(LogCategory.General, $"Completed writing dictionary with {dictionaryWordsByLetter.Count} letters");
 
         return dictionaryWordsByLetter;
     }

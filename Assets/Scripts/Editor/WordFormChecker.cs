@@ -10,23 +10,18 @@ public class WordFormChecker
     private DataHandler _dataHandler;
     private bool _foundValidWord = false;
 
-    //public List<CharacterTile> AllTileData = new List<CharacterTile>()
-    //{
-    //    new CharacterTileDataModel(1, new Vector3(), "a", new List<int>() {  }),
-    //    new CharacterTileDataModel(2, new Vector3(), "b", new List<int>() { 4, 1 }),
-    //    new CharacterTileDataModel(3, new Vector3(), "c", new List<int>() { 1 }),
-    //    new CharacterTileDataModel(4, new Vector3(), "e", new List<int>() {  })
-    //};
-
     public List<CharacterTile> AllTileData = new List<CharacterTile>();
 
     public static void Execute()
     {
         Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
         WordFormChecker wordFormChecker = new WordFormChecker();
+        stopwatch.Start();
         wordFormChecker.Initialise();
         List<CharacterTile> startingList = wordFormChecker.GetStartingList();
+        stopwatch.Stop();
+        ConsoleLog.Log(LogCategory.General, $"Initialisation took {stopwatch.ElapsedMilliseconds} milliseconds. Starting check now.");
+        stopwatch.Start();
         wordFormChecker.CheckCombinations(startingList, new List<CharacterTile>());
         stopwatch.Stop();
         ConsoleLog.Log(LogCategory.General, $"Check took {stopwatch.ElapsedMilliseconds} milliseconds");
@@ -35,50 +30,64 @@ public class WordFormChecker
 
     public void Initialise()
     {
-        //AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(1, new Vector3(), "a", new List<int>() { })));
-        //AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(2, new Vector3(), "b", new List<int>() { 4, 1})));
-        //AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(3, new Vector3(), "c", new List<int>() { 1 })));
-        //AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(4, new Vector3(), "e", new List<int>() { })));
+        AllTileData.Clear();
 
-        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(17, new Vector3(), "c", new List<int>() { 2, 3, 9 })));
-        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(9, new Vector3(), "b", new List<int>() { 6, 2 })));
-        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(3, new Vector3(), "a", new List<int>() { 12, 2 })));
-        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(2, new Vector3(), "i", new List<int>() { })));
-        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(12, new Vector3(), "c", new List<int>() { })));
-        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(6, new Vector3(), "h", new List<int>() { })));
-        
-        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(18, new Vector3(), "b", new List<int>() { 1, 8, 11 })));
-        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(8, new Vector3(), "e", new List<int>() { 10, 1 })));
-        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(11, new Vector3(), "t", new List<int>() { 0, 1 })));
-        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(1, new Vector3(), "a", new List<int>() { })));
-        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(10, new Vector3(), "d", new List<int>() { })));
-        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(0, new Vector3(), "t", new List<int>() { })));
- 
+        List<CharacterTileDataModel> testData = new List<CharacterTileDataModel>()
+        {
+        //    new CharacterTileDataModel(1, new Vector3(), "a", new List<int>() {  }),
+        //    new CharacterTileDataModel(2, new Vector3(), "b", new List<int>() { 4, 1 }),
+        //    new CharacterTileDataModel(3, new Vector3(), "c", new List<int>() { 1 }),
+        //    new CharacterTileDataModel(4, new Vector3(), "e", new List<int>() {  })
+
+            new CharacterTileDataModel(17, new Vector3(), "c", new List<int>() { 2, 3, 9 }),
+            new CharacterTileDataModel(9, new Vector3(), "b", new List<int>() { 6, 2 }),
+            new CharacterTileDataModel(3, new Vector3(), "a", new List<int>() { 12, 2 }),
+            new CharacterTileDataModel(2, new Vector3(), "i", new List<int>() {  }),
+            new CharacterTileDataModel(12, new Vector3(), "c", new List<int>() {  }),
+            new CharacterTileDataModel(6, new Vector3(), "h", new List<int>() {  }),
+
+            new CharacterTileDataModel(18, new Vector3(), "b", new List<int>() { 1, 8, 11 }),
+            new CharacterTileDataModel(8, new Vector3(), "e", new List<int>() { 10, 1 }),
+            new CharacterTileDataModel(11, new Vector3(), "t", new List<int>() { 0, 1 }),
+            new CharacterTileDataModel(1, new Vector3(), "a", new List<int>() {  }),
+            new CharacterTileDataModel(10, new Vector3(), "d", new List<int>() {  }),
+            new CharacterTileDataModel(0, new Vector3(), "t", new List<int>() {  })
+        };
+
+        for (int i = 0; i < testData.Count; i++)
+        {
+            CharacterTile characterTile = new CharacterTile();
+            characterTile.Setup(testData[i]);
+            AllTileData.Add(characterTile);
+        }
 
         for (int i = 0; i < AllTileData.Count; i++)
         {
             TilesById.Add(AllTileData[i].Id, AllTileData[i]);
         }
 
+        for (int j = 0; j < AllTileData.Count; j++)
+        {
+            List<CharacterTile> tileChildren = GetChildConnections(AllTileData[j], TilesById);
+            AllTileData[j].Initialise(tileChildren);
+        }
+
         _dataHandler = new DataHandler();
         WordDictionary = _dataHandler.GetDictionaryData();
-
-        AddParents();
-
     }
 
-    private void AddParents()
+    private List<CharacterTile> GetChildConnections(CharacterTile characterTile, Dictionary<int, CharacterTile> tilesById)
     {
-        for (int i = 0; i < AllTileData.Count; i++)
+        List<int> tileChildrenIds = characterTile.CharacterTileData.TileChildren;
+        List<CharacterTile> tileChildren = new List<CharacterTile>();
+
+        foreach (int id in tileChildrenIds)
         {
-            CharacterTile parentTile = AllTileData[i];
-            for (int j = 0; j < parentTile.TileChildren.Count; j++)
-            {
-                int childId = parentTile.TileChildren[j].Id;
-                CharacterTile childTile = TilesById[childId];
-                childTile.AddParentTile(parentTile);
-            }
+            CharacterTile childTile = tilesById[id];
+            tileChildren.Add(childTile);
         }
+
+        return tileChildren;
     }
 
     private List<CharacterTile> GetStartingList()
@@ -132,6 +141,12 @@ public class WordFormChecker
         {
             bool blockedByParent = false;
             CharacterTile child = TilesById[currentTile.TileChildren[k].Id];
+            
+            if (tilesToCheck.Contains(child)) continue;
+            if (currentSubset.Contains(child)) continue;
+            if (currentTile == child) continue;
+            if (child.State == CharacterTileState.Used) continue; // normally not possible, but 
+
             List<CharacterTile> parents = child.TileParents;
 
             for (int l = 0; l < parents.Count; l++)
