@@ -2,7 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class CelebrationScreen : MonoBehaviour
+public class CelebrationView : MonoBehaviour, ILevelScreenView
 {
     [SerializeField] private TextMeshProUGUI _highScoreText;
 
@@ -16,6 +16,18 @@ public class CelebrationScreen : MonoBehaviour
 
     public void Initialise()
     {
+    }
+
+    public void Show()
+    {
+        SetHighScoreText();
+        gameObject.SetActive(true);
+        StartCelebration();
+    }
+
+    public void Hide()
+    {
+
     }
 
     public void SetHighScoreText()

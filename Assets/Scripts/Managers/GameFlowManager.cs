@@ -20,7 +20,6 @@ public class GameFlowManager : MonoBehaviour
     public event EventHandler<WordValidatedEvent> WordValidatedEvent;
     public event EventHandler<UndoEvent> UndoEvent;
 
-
     public void Awake()
     {
         Instance = this;

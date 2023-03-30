@@ -5,65 +5,20 @@ public class LevelUIController : MonoBehaviour
 {
     public static LevelUIController Instance;
 
-    [SerializeField] private CelebrationScreen _celebrationScreen;
+    [SerializeField] private LevelView _levelView;
+    [SerializeField] private CelebrationView _celebrationScreen;
 
-    [SerializeField] private TextMeshProUGUI _levelNameText;
-    [SerializeField] private TextMeshProUGUI _submittedWordsText;
-
-    [SerializeField] private CurrentScoreText _currentScoreText;
-    [SerializeField] private WordScoreProjectionText _wordScoreProjection;
-    [SerializeField] private FormedWordContainer _formedWordContainer;
-    [SerializeField] private CharacterTileContainer _characterTileContainer;
-    [SerializeField] private EndGamePanel _endGamePanel;
-
-    [SerializeField] private UndoButton _undoButton;
-    [SerializeField] private WordConfirmButton _wordConfirmButton;
-    [SerializeField] private SettingsMenuButton _settingsMenuButton;
+    private ILevelScreenView _currentView;
 
     public void Awake()
     {
+        if (_levelView == null)
+        {
+            ConsoleLog.Error(LogCategory.General, $"Could not find _levelView");
+        }
         if (_celebrationScreen == null)
         {
             ConsoleLog.Error(LogCategory.General, $"Could not find _celebrationScreen");
-        }
-        
-        if (_levelNameText == null)
-        {
-            ConsoleLog.Error(LogCategory.General, $"Could not find level name text on {gameObject.name}");
-        }
-        if (_currentScoreText == null)
-        {
-            ConsoleLog.Error(LogCategory.General, $"Could not find _currentScoreText on {gameObject.name}");
-        }
-        if (_wordScoreProjection == null)
-        {
-            ConsoleLog.Error(LogCategory.General, $"Could not find _wordScoreProjectionText on {gameObject.name}");
-        }
-        if (_submittedWordsText == null)
-        {
-            ConsoleLog.Error(LogCategory.General, $"Could not find _submittedWordsText on {gameObject.name}");
-        }
-
-        if (_formedWordContainer == null)
-        {
-            ConsoleLog.Error(LogCategory.General, $"Could not find _formedWordContainer on {gameObject.name}");
-        }
-        if (_characterTileContainer == null)
-        {
-            ConsoleLog.Error(LogCategory.General, $"Could not find _letterTileContainer on {gameObject.name}");
-        }
-
-        if (_undoButton == null)
-        {
-            ConsoleLog.Error(LogCategory.General, $"Could not find _undoButton on {gameObject.name}");
-        }
-        if (_wordConfirmButton == null)
-        {
-            ConsoleLog.Error(LogCategory.General, $"Could not find _wordConfirmButton on {gameObject.name}");
-        }
-        if (_settingsMenuButton == null)
-        {
-            ConsoleLog.Error(LogCategory.General, $"Could not find _settingsMenuButton on {gameObject.name}");
         }
 
         Instance = this;
@@ -77,50 +32,28 @@ public class LevelUIController : MonoBehaviour
             Setup();
             Initialise();
         }
+
+        SetCurrentView(_levelView);
     }
 
     public void Setup()
     {
-        _undoButton.Setup();
-        _wordConfirmButton.Setup();
-        _settingsMenuButton.Setup();
-
+        _levelView.Setup();
         _celebrationScreen.Setup();
-        _currentScoreText.Setup();
-        _wordScoreProjection.Setup();
-        _formedWordContainer.Setup();
-        _characterTileContainer.Setup();
     }
 
     public void Initialise()
     {
-        _levelNameText.text = GameManager.Instance.CurrentLevelData.Title;
-
-        _currentScoreText.Initialise();
+        _levelView.Initialise();
         _celebrationScreen.Initialise();
-        _wordScoreProjection.Initialise();
-        _formedWordContainer.Initialise();
-        _characterTileContainer.Initialise();
 
-        _undoButton.Initialise();
-        _wordConfirmButton.Initialise();
-        _settingsMenuButton.Initialise();
-
-        GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
     }
 
     private void Unload()
     {
-        GameFlowManager.Instance.WordSubmitEvent -= OnWordSubmitEvent;
-
         GameFlowManager.Instance.Unload();
 
-        _formedWordContainer.Unload();
-        _wordScoreProjection.Unload();
-        _characterTileContainer.Unload();
-
-        _undoButton.Unload();
-        _wordConfirmButton.Unload();
+        _levelView.Unload();
     }
 
     public void ToLevelSelection()
@@ -131,20 +64,22 @@ public class LevelUIController : MonoBehaviour
 
     public void ToCelebration()
     {
-        _celebrationScreen.SetHighScoreText();
-        _celebrationScreen.gameObject.SetActive(true);
-        _celebrationScreen.StartCelebration();
+        SetCurrentView(_celebrationScreen);
+    }
+
+    private void SetCurrentView(ILevelScreenView newView)
+    {
+        if (_currentView != null)
+        {
+            _currentView.Hide();
+        }
+
+        _currentView = newView;
+        _currentView.Show();
     }
 
     public void ShowEndGamePanel()
     {
-        _endGamePanel.gameObject.SetActive(true);
-        _endGamePanel.Setup();
-        _endGamePanel.Initialise();
-    }
-
-    public void OnWordSubmitEvent(object sender, WordSubmitEvent e)
-    {
-        _submittedWordsText.text += $"{e.WordPickAction.FormedWord.Word}\n";
+        _levelView.ShowEndGamePanel();
     }
 }

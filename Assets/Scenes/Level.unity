@@ -1670,8 +1670,9 @@ GameObject:
   - component: {fileID: 832477899}
   - component: {fileID: 832477901}
   - component: {fileID: 832477900}
+  - component: {fileID: 832477902}
   m_Layer: 5
-  m_Name: GameView
+  m_Name: LevelView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1745,6 +1746,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 832477898}
   m_CullTransparentMesh: 1
+--- !u!114 &832477902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832477898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ab7cf1a6c8d57649a004dc44bfd4124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _levelNameText: {fileID: 581727443}
+  _submittedWordsText: {fileID: 1864259735}
+  _currentScoreText: {fileID: 570354286}
+  _wordScoreProjection: {fileID: 900918613}
+  _formedWordContainer: {fileID: 297640427}
+  _characterTileContainer: {fileID: 1002692875}
+  _endGamePanel: {fileID: 1131765314}
+  _undoButton: {fileID: 1792914513}
+  _wordConfirmButton: {fileID: 1758996680}
+  _settingsMenuButton: {fileID: 1257567857}
 --- !u!1 &900918609
 GameObject:
   m_ObjectHideFlags: 0
@@ -3505,17 +3528,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98138821dee86b74ab5dbfba9029e760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _levelView: {fileID: 832477902}
   _celebrationScreen: {fileID: 257637778}
-  _levelNameText: {fileID: 581727443}
-  _submittedWordsText: {fileID: 1864259735}
-  _currentScoreText: {fileID: 570354286}
-  _wordScoreProjection: {fileID: 900918613}
-  _formedWordContainer: {fileID: 297640427}
-  _characterTileContainer: {fileID: 1002692875}
-  _endGamePanel: {fileID: 1131765314}
-  _undoButton: {fileID: 1792914513}
-  _wordConfirmButton: {fileID: 1758996680}
-  _settingsMenuButton: {fileID: 1257567857}
 --- !u!1 &1709747338
 GameObject:
   m_ObjectHideFlags: 0
