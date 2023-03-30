@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class LevelDataModel
 {
-    public int LevelNumber;
-    public string Title;
-    public List<CharacterTileDataModel> LetterTiles;
+    public int LevelNumber { get; private set; }
+    public string Title { get; private set; }
+    public List<CharacterTileDataModel> LetterTiles { get; private set; }
 
     public LevelDataModel(string title, List<CharacterTileDataModel> letterTiles)
     {

@@ -18,8 +18,7 @@ public class JsonLevelDataReader : IJsonFileReader
     private string GetDataContent(string levelName)
     {
         string filePath = Path.Combine(Application.streamingAssetsPath, "levels", levelName);
-        Debug.Log($"!!! filePath LevelDataReader is {filePath}");
-        ConsoleLog.Log(LogCategory.General, $".... filePath LevelDataReader is {filePath}");
+
         if (Application.platform == RuntimePlatform.Android)
         {
             UnityWebRequest loadingRequest = UnityWebRequest.Get(filePath);
@@ -32,7 +31,7 @@ public class JsonLevelDataReader : IJsonFileReader
         {
             if (!File.Exists(filePath))
             {
-                throw new Exception($"File {levelName}.json doesn't exist.");
+                throw new Exception($"File {levelName} doesn't exist.");
             }
 
             return File.ReadAllText(filePath);

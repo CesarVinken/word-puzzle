@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GameDataModel
 {
-    public List<LevelDataModel> Levels;
+    public List<LevelDataModel> Levels { get; private set; }
 
     public GameDataModel(List<LevelDataModel> levels)
     {
