@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class CharacterTile
 {
     public CharacterTileMono CharacterTileMono { get; private set; }
@@ -76,7 +75,6 @@ public class CharacterTile
             default:
                 throw new NotImplementedException("Character tile state", State.ToString());
         }
-
     }
 
     private void BlockChildren()
@@ -114,5 +112,4 @@ public class CharacterTile
             childTile.State = CharacterTileState.Open;
         }
     }
-
 }

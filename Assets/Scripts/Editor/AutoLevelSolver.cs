@@ -12,23 +12,6 @@ public class AutoLevelSolver
 
     public List<CharacterTile> AllTileData = new List<CharacterTile>();
 
-    //public List<CharacterTileDataModel> AllTileData = new List<CharacterTileDataModel>()
-    //{
-    //    new CharacterTileDataModel(17, new Vector3(), "c", new List<int>() { 2, 3, 9 }),
-    //    new CharacterTileDataModel(9, new Vector3(), "b", new List<int>() { 6, 2 }),
-    //    new CharacterTileDataModel(3, new Vector3(), "a", new List<int>() { 12, 2 }),
-    //    new CharacterTileDataModel(2, new Vector3(), "i", new List<int>() {  }),
-    //    new CharacterTileDataModel(12, new Vector3(), "c", new List<int>() {  }),
-    //    new CharacterTileDataModel(6, new Vector3(), "h", new List<int>() {  }),
-
-    //    new CharacterTileDataModel(18, new Vector3(), "b", new List<int>() { 1, 8, 11 }),
-    //    new CharacterTileDataModel(8, new Vector3(), "e", new List<int>() { 10, 1 }),
-    //    new CharacterTileDataModel(11, new Vector3(), "t", new List<int>() { 0, 1 }),
-    //    new CharacterTileDataModel(1, new Vector3(), "a", new List<int>() {  }),
-    //    new CharacterTileDataModel(10, new Vector3(), "d", new List<int>() {  }),
-    //    new CharacterTileDataModel(0, new Vector3(), "t", new List<int>() {  })
-    //};
-
     public static void Execute()
     {
         Stopwatch stopwatch = new Stopwatch();
@@ -166,7 +149,7 @@ public class AutoLevelSolver
                 // the child can only be added if the parent already appears in the subset
                 if (currentSubset.FirstOrDefault(t => t.Id == parent.Id) == null)
                 {
-                    //      ConsoleLog.Warning(LogCategory.General, $"{possibleParent.CharacterTileData.Character} ({possibleParent.Id}) is the parent of {child.CharacterTileData.Character} ({child.Id}), but the parent is not part of the subset");
+                    // ConsoleLog.Warning(LogCategory.General, $"{possibleParent.CharacterTileData.Character} ({possibleParent.Id}) is the parent of {child.CharacterTileData.Character} ({child.Id}), but the parent is not part of the subset");
                     blockedByParent = true;
                     break;
                 }
@@ -174,7 +157,7 @@ public class AutoLevelSolver
 
             if (!blockedByParent)
             {
-            //    ConsoleLog.Warning(LogCategory.General, $"add {child.Character}");
+            // ConsoleLog.Warning(LogCategory.General, $"add {child.Character}");
                 tilesToCheck.Add(child);
             }
         }

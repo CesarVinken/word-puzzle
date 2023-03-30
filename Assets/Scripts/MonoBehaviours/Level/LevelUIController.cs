@@ -22,7 +22,6 @@ public class LevelUIController : MonoBehaviour
         }
 
         Instance = this;
-
     }
 
     private void Start()

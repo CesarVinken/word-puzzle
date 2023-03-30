@@ -55,5 +55,4 @@ public class UndoButton : MonoBehaviour, ILevelUIButton
 
         GameFlowManager.Instance.MoveHandler.UndoTile();
     }
-
 }

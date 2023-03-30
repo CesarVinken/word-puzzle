@@ -27,5 +27,4 @@ public class MainView : MonoBehaviour, ITitleScreenView
     {
         gameObject.SetActive(false);
     }
-
 }

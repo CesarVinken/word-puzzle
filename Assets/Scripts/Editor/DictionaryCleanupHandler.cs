@@ -55,9 +55,9 @@ public class DictionaryCleanupHandler
     {
         SerialisableWordDictionaryData serialisableWordDictionaryData = new SerialisableWordDictionaryData(words);
 
-        Directory.CreateDirectory(Path.Combine(Application.dataPath, "StreamingAssets", "Words"));
+        Directory.CreateDirectory(Path.Combine(Application.dataPath, "StreamingAssets", "words"));
 
-        string filePath = Path.Combine(Application.streamingAssetsPath, "Words", "words.json");
+        string filePath = Path.Combine(Application.streamingAssetsPath, "words", "words.json");
         string jsonString = JsonConvert.SerializeObject(serialisableWordDictionaryData);
 
         File.WriteAllText(filePath, jsonString);

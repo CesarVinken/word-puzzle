@@ -158,7 +158,7 @@ public class WordFormChecker
                 // the child can only be added if the parent already appears in the subset
                 if (currentSubset.FirstOrDefault(t => t.Id == parent.Id) == null)
                 {
-                    //      ConsoleLog.Warning(LogCategory.General, $"{possibleParent.CharacterTileData.Character} ({possibleParent.Id}) is the parent of {child.CharacterTileData.Character} ({child.Id}), but the parent is not part of the subset");
+                    // ConsoleLog.Warning(LogCategory.General, $"{possibleParent.CharacterTileData.Character} ({possibleParent.Id}) is the parent of {child.CharacterTileData.Character} ({child.Id}), but the parent is not part of the subset");
                     blockedByParent = true;
                     break;
                 }
@@ -166,7 +166,7 @@ public class WordFormChecker
 
             if (!blockedByParent)
             {
-                //    ConsoleLog.Warning(LogCategory.General, $"add {child.Character}");
+                // ConsoleLog.Warning(LogCategory.General, $"add {child.Character}");
                 tilesToCheck.Add(child);
             }
         }

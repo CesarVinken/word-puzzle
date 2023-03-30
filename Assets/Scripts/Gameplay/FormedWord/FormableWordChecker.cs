@@ -76,7 +76,6 @@ public class FormableWordChecker
             {
                 CharacterTile parent = parents[i];
 
-                
                 if (child == parent) continue; // a child cannot be its own parent
                 if (parent.State == CharacterTileState.Used) continue;
 
