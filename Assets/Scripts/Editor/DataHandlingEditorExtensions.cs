@@ -3,13 +3,6 @@ using UnityEngine;
 
 public class DataHandlingEditorExtensions : Editor
 {
-    // takes given data and looks if a valid word can be formed
-    [MenuItem("Extensions/Form Word Checker")]
-    public static void CheckForFormableWord()
-    {
-        WordFormChecker.Execute();
-    }
-
     // create a user data json file in which all game progress is cleared. Only the first level is unlocked
     [MenuItem("Extensions/Reset User Data")]
     public static void ResetUserData()
@@ -22,6 +15,13 @@ public class DataHandlingEditorExtensions : Editor
     public static void CleanUpDictionaryData()
     {
         DictionaryCleanupHandler.CleanUp();
+    }
+
+    // takes given data and looks if a valid word can be formed
+    [MenuItem("Extensions/Form Word Checker")]
+    public static void CheckForFormableWord()
+    {
+        WordFormChecker.Execute();
     }
 
     // find the highest possible score and the moves required to get there
