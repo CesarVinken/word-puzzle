@@ -13,7 +13,7 @@ public class GameFlowManager : MonoBehaviour
 
     public PlayerActionHandler MoveHandler { get; private set; }
     public ValidationHandler ValidationHandler { get; private set; }
-    private AutoLevelSolver _autoLevelSolver;
+    private FormableWordChecker _formableWordChecker;
 
     public event EventHandler<LetterPickEvent> LetterPickEvent;
     public event EventHandler<WordSubmitEvent> WordSubmitEvent;
@@ -27,7 +27,7 @@ public class GameFlowManager : MonoBehaviour
 
         MoveHandler = new PlayerActionHandler();
         ValidationHandler = new ValidationHandler();
-        _autoLevelSolver = new AutoLevelSolver();
+        _formableWordChecker = new FormableWordChecker();
     }
 
     public void Start()
@@ -115,7 +115,8 @@ public class GameFlowManager : MonoBehaviour
 
     private bool CheckForLevelEnd()
     {
-        return _autoLevelSolver.FormableWordsLeft();
+        bool formableWordLeft = _formableWordChecker.FindFormableWord();
+        return formableWordLeft;
     }
 
     #region events

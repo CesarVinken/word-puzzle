@@ -9,7 +9,7 @@ public class DataHandler
 
     public void Initialise()
     {
-        string filePath = Path.Combine(Path.Combine(Application.streamingAssetsPath, "Levels"));
+        string filePath = Path.Combine(Path.Combine(Application.streamingAssetsPath, "levels"));
 
         _levelFileNames = Directory.GetFiles(filePath)
             .Where(file => !file.EndsWith(".meta"))

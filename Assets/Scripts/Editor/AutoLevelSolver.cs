@@ -3,18 +3,12 @@ using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
-public class LevelSolveChecker
+public class AutoLevelSolver
 {
     public Dictionary<char, List<string>> WordDictionary { get; private set; }
     public Dictionary<int, CharacterTileDataModel> TilesById { get; private set; } = new Dictionary<int, CharacterTileDataModel>();
     private DataHandler _dataHandler;
-    //public List<CharacterTileDataModel> AllTileData = new List<CharacterTileDataModel>()
-    //{
-    //    new CharacterTileDataModel(1, new Vector3(), "a", new List<int>() {  }),
-    //    new CharacterTileDataModel(2, new Vector3(), "b", new List<int>() { 4, 1 }),
-    //    new CharacterTileDataModel(3, new Vector3(), "c", new List<int>() { 1 }),
-    //    new CharacterTileDataModel(4, new Vector3(), "e", new List<int>() {  })
-    //};
+    private bool _foundValidWord = false;
 
     public List<CharacterTileDataModel> AllTileData = new List<CharacterTileDataModel>()
     {
@@ -31,19 +25,24 @@ public class LevelSolveChecker
         new CharacterTileDataModel(1, new Vector3(), "a", new List<int>() {  }),
         new CharacterTileDataModel(10, new Vector3(), "d", new List<int>() {  }),
         new CharacterTileDataModel(0, new Vector3(), "t", new List<int>() {  })
-
     };
-
-    bool _foundValidWord = false;
 
     public static void Execute()
     {
-        LevelSolveChecker levelSolveChecker = new LevelSolveChecker();
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
 
-        levelSolveChecker.Check();
+        AutoLevelSolver autoLevelSolver = new AutoLevelSolver();
+        autoLevelSolver.Initialise();
+        List<CharacterTileDataModel> startingList = autoLevelSolver.GetStartingList();
+        autoLevelSolver.CheckCombinations(startingList, new List<CharacterTileDataModel>());
+
+        stopwatch.Stop();
+
+        ConsoleLog.Log(LogCategory.General, $"Check took {stopwatch.ElapsedMilliseconds} milliseconds");
     }
 
-    private void Check()
+    public void Initialise()
     {
         for (int i = 0; i < AllTileData.Count; i++)
         {
@@ -53,35 +52,38 @@ public class LevelSolveChecker
         _dataHandler = new DataHandler();
         WordDictionary = _dataHandler.GetDictionaryData();
 
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.Start();
+        AddParents(); 
+    }
 
+    private void AddParents()
+    {
+        for (int i = 0; i < AllTileData.Count; i++)
+        {
+            CharacterTileDataModel parentTile = AllTileData[i];
+            for (int j = 0; j < parentTile.TileChildren.Count; j++)
+            {
+                int childId = parentTile.TileChildren[j];
+                CharacterTileDataModel childTile = TilesById[childId];
+                childTile.AddParent(parentTile.Id);
+            }
+        }
+    }
+
+    private List<CharacterTileDataModel> GetStartingList()
+    {
         List<CharacterTileDataModel> startingList = new List<CharacterTileDataModel>();
         for (int i = 0; i < AllTileData.Count; i++)
         {
-            bool isBlockedByParentTile = false;
             CharacterTileDataModel tile = AllTileData[i];
-            for (int j = 0; j < AllTileData.Count; j++)
-            {
-                if (AllTileData[j].TileChildren.Contains(tile.Id))
-                {
-                    isBlockedByParentTile = true;
-                    break;
-                }
-            }
-
-            if (!isBlockedByParentTile)
+           
+            if (tile.TileParents.Count == 0)
             {
                 startingList.Add(tile);
             }
         }
 
-        CheckCombinations(startingList, new List<CharacterTileDataModel>());
-
-        stopwatch.Stop();
-        ConsoleLog.Log(LogCategory.General, $"Check took {stopwatch.ElapsedMilliseconds} milliseconds");
+        return startingList;
     }
-
 
     private void CheckCombinations(List<CharacterTileDataModel> tilesToCheck, List<CharacterTileDataModel> currentSubset) 
     {
@@ -99,7 +101,7 @@ public class LevelSolveChecker
             updatedCurrentSubset.Add(tile);
 
             string wordAttempt = string.Join("", updatedCurrentSubset.Select(c => c.Character)).ToUpper(); // does not need ToUpper in game
-            ConsoleLog.Log(LogCategory.General, $"we add '{tile.Character}' and the full charCombo is now: {wordAttempt}");
+         //   ConsoleLog.Log(LogCategory.General, $"we add '{tile.Character}' and the full charCombo is now: {wordAttempt}");
 
             List<CharacterTileDataModel> updatedTilesToCheck = new List<CharacterTileDataModel>(tilesToCheck.Count);
             updatedTilesToCheck.AddRange(tilesToCheck);
@@ -118,33 +120,26 @@ public class LevelSolveChecker
         {
             bool blockedByParent = false;
             CharacterTileDataModel child = TilesById[currentTile.TileChildren[k]];
-            List<CharacterTileDataModel> parents = new List<CharacterTileDataModel>();
-            foreach (KeyValuePair<int, CharacterTileDataModel> item in TilesById)
+            List<int> parentsIds = child.TileParents;
+
+            for (int l = 0; l < parentsIds.Count; l++)
             {
-                CharacterTileDataModel possibleParent = item.Value;
+                CharacterTileDataModel parent = TilesById[parentsIds[l]];
+                if (child == parent) continue;
+                if (parent.State == CharacterTileState.Used) continue;
 
-                // a child cannot be its own parent
-                if (child == possibleParent) continue;
-
-                // check if the child tile is also the child of another tile. That parent tile needs to be part of the subset too.
-                if (!possibleParent.TileChildren.Contains(child.Id))
+                // the child can only be added if the parent already appears in the subset
+                if (currentSubset.FirstOrDefault(t => t.Id == parent.Id) == null)
                 {
-                    continue;
-                }
-                ConsoleLog.Log(LogCategory.General, $"{possibleParent.Character} is  a parent of {child.Character}");
-
-                if (currentSubset.FirstOrDefault(t => t.Id == possibleParent.Id) == null)
-                {
-                    ConsoleLog.Warning(LogCategory.General, $"{possibleParent.Character} ({possibleParent.Id}) is the parent of {child.Character} ({child.Id}), but the parent is not part of the subset");
+                    //      ConsoleLog.Warning(LogCategory.General, $"{possibleParent.CharacterTileData.Character} ({possibleParent.Id}) is the parent of {child.CharacterTileData.Character} ({child.Id}), but the parent is not part of the subset");
                     blockedByParent = true;
                     break;
                 }
-
             }
 
             if (!blockedByParent)
             {
-                ConsoleLog.Warning(LogCategory.General, $"add {child.Character}");
+            //    ConsoleLog.Warning(LogCategory.General, $"add {child.Character}");
                 tilesToCheck.Add(child);
             }
         }

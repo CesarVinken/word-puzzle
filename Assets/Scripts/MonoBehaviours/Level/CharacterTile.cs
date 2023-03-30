@@ -15,7 +15,6 @@ public class CharacterTile : MonoBehaviour
     public CharacterTileDataModel CharacterTileData { get; private set; }
 
     public int Id { get; private set; }
-    public CharacterTileState State = CharacterTileState.Open;
 
     public void Setup(CharacterTileDataModel characterTileData)
     {
@@ -57,25 +56,26 @@ public class CharacterTile : MonoBehaviour
         if(TileParents.Count == 0)
         {
             Open();
-            State = CharacterTileState.Open;
+            CharacterTileData.State = CharacterTileState.Open;
         }
         else
         {
             Block();
-            State = CharacterTileState.Blocked;
+            CharacterTileData.State = CharacterTileState.Blocked;
         }
     }
 
     public void AddParentTile(CharacterTile characterTile)
     {
         TileParents.Add(characterTile);
+        CharacterTileData.AddParent(characterTile.Id);
     }
 
     public void SetCharacterTileState(CharacterTileState newState)
     {
-        State = newState;
+        CharacterTileData.State = newState;
 
-        switch (State)
+        switch (CharacterTileData.State)
         {
             case CharacterTileState.Blocked:
                 Block();
@@ -90,7 +90,7 @@ public class CharacterTile : MonoBehaviour
                 OpenChildren();
                 break;
             default:
-                throw new NotImplementedException("Character tile state", State.ToString());
+                throw new NotImplementedException("Character tile state", CharacterTileData.State.ToString());
         }
 
     }
@@ -99,11 +99,11 @@ public class CharacterTile : MonoBehaviour
     {
         for (int i = 0; i < TileChildren.Count; i++)
         {
-            if(TileChildren[i].State != CharacterTileState.Blocked)
+            if(TileChildren[i].CharacterTileData.State != CharacterTileState.Blocked)
             {
                 CharacterTile childTile = TileChildren[i];
                 childTile.Block();
-                childTile.State = CharacterTileState.Blocked;
+                childTile.CharacterTileData.State = CharacterTileState.Blocked;
             }
         }
     }
@@ -112,13 +112,13 @@ public class CharacterTile : MonoBehaviour
     {
         for (int i = 0; i < TileChildren.Count; i++)
         {
-            if (TileChildren[i].State == CharacterTileState.Open) continue;
+            if (TileChildren[i].CharacterTileData.State == CharacterTileState.Open) continue;
 
             bool hasBlockingParent = false;
             CharacterTile childTile = TileChildren[i];
             for (int j = 0; j < childTile.TileParents.Count; j++)
             {
-                if(childTile.TileParents[j].State != CharacterTileState.Used)
+                if(childTile.TileParents[j].CharacterTileData.State != CharacterTileState.Used)
                 {
                     hasBlockingParent = true;
                 }
@@ -127,7 +127,7 @@ public class CharacterTile : MonoBehaviour
             if (hasBlockingParent) continue;
 
             childTile.Open();
-            childTile.State = CharacterTileState.Open;
+            childTile.CharacterTileData.State = CharacterTileState.Open;
         }
     }
 
@@ -152,14 +152,11 @@ public class CharacterTile : MonoBehaviour
 
     public void OnClick()
     {
-        if (State != CharacterTileState.Open) return;
+        if (CharacterTileData.State != CharacterTileState.Open) return;
 
         if (GameFlowManager.Instance.LetterPickActions.Count >= 7) return; // the player cannot do more moves if the number of moves equals the maximum word length
 
-        ConsoleLog.Log(LogCategory.General, $"Add {_characterText.text} to word", LogPriority.Normal);
+        ConsoleLog.Log(LogCategory.General, $"Add {_characterText.text} to word", LogPriority.Low);
         GameFlowManager.Instance.MoveHandler.UseTile(this);
     }
 }
-
-
-

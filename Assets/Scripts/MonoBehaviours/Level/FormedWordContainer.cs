@@ -37,7 +37,6 @@ public class FormedWordContainer : MonoBehaviour
 
     private void OnLetterPickEvent(object sender, LetterPickEvent e)
     {
-        ConsoleLog.Warning(LogCategory.General, $"FillNextSlot!");
         _formedWordHandler.FillNextSlot(e.LetterPickAction.CharacterTile);
     }
 

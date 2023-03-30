@@ -3,11 +3,18 @@ using UnityEngine;
 
 public class DataHandlingEditorExtensions : Editor
 {
-    // give data, and check if there are any ways to form valid words
-    [MenuItem("Data/LevelSolveChecker")]
+    // find the highest possible score and the moves required to get there
+    [MenuItem("Data/Auto Level Solver")]
     public static void CheckLevelResolve()
     {
-        LevelSolveChecker.Execute();
+        AutoLevelSolver.Execute();
+    }
+
+    // takes given data and looks if a valid word can be formed
+    [MenuItem("Data/Form Word Checker")]
+    public static void CheckForFormableWord()
+    {
+        WordFormChecker.Execute();
     }
 
     // create a user data json file in which all game progress is cleared. Only the first level is unlocked
