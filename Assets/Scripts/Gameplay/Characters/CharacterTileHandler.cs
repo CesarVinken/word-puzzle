@@ -14,17 +14,26 @@ public class CharacterTileHandler
 
         for (int i = 0; i < characterTileDatas.Count; i++)
         {
-            CharacterTile characterTile = CreateTile(characterTileDatas[i], characterTilePrefab, container);
-            tilesById.Add(characterTile.Id, characterTile);
-            Tiles.Add(characterTile);
+            CharacterTileMono characterTileMono = CreateTile(characterTileDatas[i], characterTilePrefab, container);
+            tilesById.Add(characterTileMono.CharacterTile.Id, characterTileMono.CharacterTile);
+            Tiles.Add(characterTileMono.CharacterTile);
         }
 
         GameFlowManager.Instance.SetTilesById(tilesById);
 
         foreach (KeyValuePair<int, CharacterTile> item in tilesById)
         {
-            List<CharacterTile> tileChildren = GetChildConnections(item.Value, tilesById);
-            item.Value.Initialise(tileChildren);
+            CharacterTile characterTile = item.Value;
+            List<CharacterTile> tileChildren = GetChildConnections(characterTile, tilesById);
+            CharacterTileMono characterTileMono = characterTile.CharacterTileMono;
+            if (characterTileMono)
+            {
+                characterTileMono.Initialise(tileChildren);
+            }
+            else
+            {
+                characterTile.Initialise(tileChildren);
+            }
         }
 
         foreach (KeyValuePair<int, CharacterTile> item in tilesById)
@@ -67,7 +76,7 @@ public class CharacterTileHandler
         GameFlowManager.Instance.ValidationHandler.Validate(word);
     }
 
-    private CharacterTile CreateTile(CharacterTileDataModel characterTileData, GameObject characterTilePrefab, Transform container)
+    private CharacterTileMono CreateTile(CharacterTileDataModel characterTileData, GameObject characterTilePrefab, Transform container)
     {
         // todo we can use object pooling here
         GameObject characterTileGO = GameObject.Instantiate(characterTilePrefab, container);
@@ -78,7 +87,7 @@ public class CharacterTileHandler
 
         tileRectTransform.localPosition = tilePosition;
 
-        CharacterTile characterTile = characterTileGO.GetComponent<CharacterTile>();
+        CharacterTileMono characterTile = characterTileGO.GetComponent<CharacterTileMono>();
         characterTile.Setup(characterTileData);
         return characterTile;
     }

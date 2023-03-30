@@ -65,7 +65,7 @@ public class EndGamePanel : MonoBehaviour
     private int GetTilesPenalty()
     {
         int levelScore = GameFlowManager.Instance.CurrentScore;
-        int tilesLeft = CharacterTileHandler.Tiles.Where(t => t.CharacterTileData.State != CharacterTileState.Used).Count();
+        int tilesLeft = CharacterTileHandler.Tiles.Where(t => t.State != CharacterTileState.Used).Count();
         int penaltyPerTile = 100;
 
         int tilesPenalty = tilesLeft * penaltyPerTile;

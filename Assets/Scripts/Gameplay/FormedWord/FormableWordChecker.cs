@@ -14,8 +14,8 @@ public class FormableWordChecker
         _foundFormableWord = false;
         _checkedCombinations = 0;
 
-        List<CharacterTile> notUsedTiles = CharacterTileHandler.Tiles.Where(t => t.CharacterTileData.State != CharacterTileState.Used).ToList();
-        List<CharacterTile> openTiles = notUsedTiles.Where(t => t.CharacterTileData.State == CharacterTileState.Open).ToList();
+        List<CharacterTile> notUsedTiles = CharacterTileHandler.Tiles.Where(t => t.State != CharacterTileState.Used).ToList();
+        List<CharacterTile> openTiles = notUsedTiles.Where(t => t.State == CharacterTileState.Open).ToList();
 
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
@@ -68,7 +68,7 @@ public class FormableWordChecker
             if (tilesToCheck.Contains(child)) continue;
             if (currentSubset.Contains(child)) continue;
             if (currentTile == child) continue;
-            if (child.CharacterTileData.State == CharacterTileState.Used) continue; // normally not possible, but 
+            if (child.State == CharacterTileState.Used) continue; // normally not possible, but 
 
             List<CharacterTile> parents = child.TileParents;
 
@@ -79,7 +79,7 @@ public class FormableWordChecker
                 // a child cannot be its own parent
                 if (child == parent) continue;
 
-                if (parent.CharacterTileData.State == CharacterTileState.Used) continue;
+                if (parent.State == CharacterTileState.Used) continue;
 
                 // the child can only be added if the parent already appears in the subset
                 if (currentSubset.FirstOrDefault(t => t.Id == parent.Id) == null)

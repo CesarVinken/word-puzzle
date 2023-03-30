@@ -6,11 +6,11 @@ using UnityEngine;
 public class WordFormChecker
 {
     public Dictionary<char, List<string>> WordDictionary { get; private set; }
-    public Dictionary<int, CharacterTileDataModel> TilesById { get; private set; } = new Dictionary<int, CharacterTileDataModel>();
+    public Dictionary<int, CharacterTile> TilesById { get; private set; } = new Dictionary<int, CharacterTile>();
     private DataHandler _dataHandler;
     private bool _foundValidWord = false;
 
-    //public List<CharacterTileDataModel> AllTileData = new List<CharacterTileDataModel>()
+    //public List<CharacterTile> AllTileData = new List<CharacterTile>()
     //{
     //    new CharacterTileDataModel(1, new Vector3(), "a", new List<int>() {  }),
     //    new CharacterTileDataModel(2, new Vector3(), "b", new List<int>() { 4, 1 }),
@@ -18,23 +18,7 @@ public class WordFormChecker
     //    new CharacterTileDataModel(4, new Vector3(), "e", new List<int>() {  })
     //};
 
-    public List<CharacterTileDataModel> AllTileData = new List<CharacterTileDataModel>()
-    {
-        new CharacterTileDataModel(17, new Vector3(), "c", new List<int>() { 2, 3, 9 }),
-        new CharacterTileDataModel(9, new Vector3(), "b", new List<int>() { 6, 2 }),
-        new CharacterTileDataModel(3, new Vector3(), "a", new List<int>() { 12, 2 }),
-        new CharacterTileDataModel(2, new Vector3(), "i", new List<int>() {  }),
-        new CharacterTileDataModel(12, new Vector3(), "c", new List<int>() {  }),
-        new CharacterTileDataModel(6, new Vector3(), "h", new List<int>() {  }),
-
-        new CharacterTileDataModel(18, new Vector3(), "b", new List<int>() { 1, 8, 11 }),
-        new CharacterTileDataModel(8, new Vector3(), "e", new List<int>() { 10, 1 }),
-        new CharacterTileDataModel(11, new Vector3(), "t", new List<int>() { 0, 1 }),
-        new CharacterTileDataModel(1, new Vector3(), "a", new List<int>() {  }),
-        new CharacterTileDataModel(10, new Vector3(), "d", new List<int>() {  }),
-        new CharacterTileDataModel(0, new Vector3(), "t", new List<int>() {  })
-
-    };
+    public List<CharacterTile> AllTileData = new List<CharacterTile>();
 
     public static void Execute()
     {
@@ -42,8 +26,8 @@ public class WordFormChecker
         stopwatch.Start();
         WordFormChecker wordFormChecker = new WordFormChecker();
         wordFormChecker.Initialise();
-        List<CharacterTileDataModel> startingList = wordFormChecker.GetStartingList();
-        wordFormChecker.CheckCombinations(startingList, new List<CharacterTileDataModel>());
+        List<CharacterTile> startingList = wordFormChecker.GetStartingList();
+        wordFormChecker.CheckCombinations(startingList, new List<CharacterTile>());
         stopwatch.Stop();
         ConsoleLog.Log(LogCategory.General, $"Check took {stopwatch.ElapsedMilliseconds} milliseconds");
     }
@@ -51,6 +35,26 @@ public class WordFormChecker
 
     public void Initialise()
     {
+        //AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(1, new Vector3(), "a", new List<int>() { })));
+        //AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(2, new Vector3(), "b", new List<int>() { 4, 1})));
+        //AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(3, new Vector3(), "c", new List<int>() { 1 })));
+        //AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(4, new Vector3(), "e", new List<int>() { })));
+
+        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(17, new Vector3(), "c", new List<int>() { 2, 3, 9 })));
+        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(9, new Vector3(), "b", new List<int>() { 6, 2 })));
+        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(3, new Vector3(), "a", new List<int>() { 12, 2 })));
+        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(2, new Vector3(), "i", new List<int>() { })));
+        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(12, new Vector3(), "c", new List<int>() { })));
+        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(6, new Vector3(), "h", new List<int>() { })));
+        
+        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(18, new Vector3(), "b", new List<int>() { 1, 8, 11 })));
+        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(8, new Vector3(), "e", new List<int>() { 10, 1 })));
+        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(11, new Vector3(), "t", new List<int>() { 0, 1 })));
+        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(1, new Vector3(), "a", new List<int>() { })));
+        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(10, new Vector3(), "d", new List<int>() { })));
+        AllTileData.Add(new CharacterTile().WithCharacterTileData(new CharacterTileDataModel(0, new Vector3(), "t", new List<int>() { })));
+ 
+
         for (int i = 0; i < AllTileData.Count; i++)
         {
             TilesById.Add(AllTileData[i].Id, AllTileData[i]);
@@ -67,22 +71,22 @@ public class WordFormChecker
     {
         for (int i = 0; i < AllTileData.Count; i++)
         {
-            CharacterTileDataModel parentTile = AllTileData[i];
+            CharacterTile parentTile = AllTileData[i];
             for (int j = 0; j < parentTile.TileChildren.Count; j++)
             {
-                int childId = parentTile.TileChildren[j];
-                CharacterTileDataModel childTile = TilesById[childId];
-                childTile.AddParent(parentTile.Id);
+                int childId = parentTile.TileChildren[j].Id;
+                CharacterTile childTile = TilesById[childId];
+                childTile.AddParentTile(parentTile);
             }
         }
     }
 
-    private List<CharacterTileDataModel> GetStartingList()
+    private List<CharacterTile> GetStartingList()
     {
-        List<CharacterTileDataModel> startingList = new List<CharacterTileDataModel>();
+        List<CharacterTile> startingList = new List<CharacterTile>();
         for (int i = 0; i < AllTileData.Count; i++)
         {
-            CharacterTileDataModel tile = AllTileData[i];
+            CharacterTile tile = AllTileData[i];
 
             if (tile.TileParents.Count == 0)
             {
@@ -93,7 +97,7 @@ public class WordFormChecker
         return startingList;
     }
 
-    private void CheckCombinations(List<CharacterTileDataModel> tilesToCheck, List<CharacterTileDataModel> currentSubset)
+    private void CheckCombinations(List<CharacterTile> tilesToCheck, List<CharacterTile> currentSubset)
     {
         CheckValidity(currentSubset);
 
@@ -102,16 +106,16 @@ public class WordFormChecker
 
         for (int i = 0; i < tilesToCheck.Count; i++)
         {
-            CharacterTileDataModel tile = tilesToCheck[i];
+            CharacterTile tile = tilesToCheck[i];
 
-            List<CharacterTileDataModel> updatedCurrentSubset = new List<CharacterTileDataModel>(currentSubset.Count);
+            List<CharacterTile> updatedCurrentSubset = new List<CharacterTile>(currentSubset.Count);
             updatedCurrentSubset.AddRange(currentSubset);
             updatedCurrentSubset.Add(tile);
 
-            string wordAttempt = string.Join("", updatedCurrentSubset.Select(c => c.Character)).ToUpper(); // does not need ToUpper in game
+            string wordAttempt = string.Join("", updatedCurrentSubset.Select(c => c.CharacterTileData.Character)).ToUpper(); // does not need ToUpper in game
                                                                                                            //   ConsoleLog.Log(LogCategory.General, $"we add '{tile.Character}' and the full charCombo is now: {wordAttempt}");
 
-            List<CharacterTileDataModel> updatedTilesToCheck = new List<CharacterTileDataModel>(tilesToCheck.Count);
+            List<CharacterTile> updatedTilesToCheck = new List<CharacterTile>(tilesToCheck.Count);
             updatedTilesToCheck.AddRange(tilesToCheck);
             updatedTilesToCheck.Remove(tile);
             updatedTilesToCheck = AddAvailableChildren(updatedTilesToCheck, tile, updatedCurrentSubset);
@@ -122,17 +126,17 @@ public class WordFormChecker
         }
     }
 
-    private List<CharacterTileDataModel> AddAvailableChildren(List<CharacterTileDataModel> tilesToCheck, CharacterTileDataModel currentTile, List<CharacterTileDataModel> currentSubset)
+    private List<CharacterTile> AddAvailableChildren(List<CharacterTile> tilesToCheck, CharacterTile currentTile, List<CharacterTile> currentSubset)
     {
         for (int k = 0; k < currentTile.TileChildren.Count; k++)
         {
             bool blockedByParent = false;
-            CharacterTileDataModel child = TilesById[currentTile.TileChildren[k]];
-            List<int> parentsIds = child.TileParents;
+            CharacterTile child = TilesById[currentTile.TileChildren[k].Id];
+            List<CharacterTile> parents = child.TileParents;
 
-            for (int l = 0; l < parentsIds.Count; l++)
+            for (int l = 0; l < parents.Count; l++)
             {
-                CharacterTileDataModel parent = TilesById[parentsIds[l]];
+                CharacterTile parent = parents[l];
                 if (child == parent) continue;
                 if (parent.State == CharacterTileState.Used) continue;
 
@@ -154,11 +158,11 @@ public class WordFormChecker
         return tilesToCheck;
     }
 
-    private void CheckValidity(List<CharacterTileDataModel> subset)
+    private void CheckValidity(List<CharacterTile> subset)
     {
         if (subset.Count == 0) return;
 
-        string wordAttempt = string.Join("", subset.Select(c => c.Character)).ToUpper(); // does not need ToUpper in game
+        string wordAttempt = string.Join("", subset.Select(c => c.CharacterTileData.Character)).ToUpper(); // does not need ToUpper in game
         char firstCharacter = wordAttempt[0];
         List<string> words = WordDictionary[firstCharacter];
 

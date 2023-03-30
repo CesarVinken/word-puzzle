@@ -18,8 +18,7 @@ public class JsonLevelDataReader : IJsonFileReader
     private string GetDataContent(string levelName)
     {
         string filePath = Path.Combine(Application.streamingAssetsPath, "levels", levelName);
-        Debug.Log($"!!! filePath LevelDataReader is {filePath}");
-        ConsoleLog.Log(LogCategory.General, $".... filePath LevelDataReader is {filePath}");
+
         if (Application.platform == RuntimePlatform.Android)
         {
             UnityWebRequest loadingRequest = UnityWebRequest.Get(filePath);
