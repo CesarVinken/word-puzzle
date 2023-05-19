@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour
 
         ServiceLocator.Setup();
         ServiceLocator.Instance.Register<GameFlowService>(new GameFlowService());
-        ServiceLocator.Instance.Register<AssetManager>(new AssetManager());
 
         _dataHandler = new DataHandler();
 
@@ -37,6 +36,10 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
+        GameFlowService gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+        gameFlowService.Setup();
+        gameFlowService.Initialise();
+
         // todo make async
         _dataHandler.Initialise();
         GameData = _dataHandler.GetGameData();

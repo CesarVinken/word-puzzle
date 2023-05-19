@@ -17,7 +17,6 @@ public class CharacterTileContainer : MonoBehaviour
     public void Initialise()
     {
         _characterTileHandler.PopulateLevel(transform);
-        _characterTileHandler.SortTiles(transform);
 
         _gameFlowService.UndoEvent += OnUndoEvent;
     }

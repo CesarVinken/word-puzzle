@@ -18,14 +18,14 @@ public class GameFlowService : IGameService
     public event EventHandler<WordValidatedEvent> WordValidatedEvent;
     public event EventHandler<UndoEvent> UndoEvent;
 
-    public void Awake()
+    public void Setup()
     {
         MoveHandler = new PlayerActionHandler();
         ValidationHandler = new ValidationHandler();
         _formableWordChecker = new FormableWordChecker();
     }
 
-    public void Start()
+    public void Initialise()
     {
         LetterPickEvent += OnLetterPickEvent;
         WordSubmitEvent += OnWordSubmitEvent;

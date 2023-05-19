@@ -5,34 +5,55 @@ public class CharacterTileHandler
 {
     public static List<CharacterTile> Tiles = new List<CharacterTile>();
     private GameFlowService _gameFlowService;
-    private AssetManager _assetManager;
+    Dictionary<int, CharacterTile> _tilesById = new Dictionary<int, CharacterTile>();
+    private int _currentJobs = 0;
+    private Transform _characterTileContainer;
 
     public void Setup()
     {
         _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
-        _assetManager = ServiceLocator.Instance.Get<AssetManager>();
     }
 
     public void PopulateLevel(Transform container)
     {
+        _characterTileContainer = container;
         List<CharacterTileDataModel> characterTileDatas = GameManager.Instance.CurrentLevelData.LetterTiles;
-        GameObject characterTilePrefab = _assetManager.GetCharacterTilePrefab();
-        Dictionary<int, CharacterTile> tilesById = new Dictionary<int, CharacterTile>();
-        Tiles = new List<CharacterTile>();
+    //    GameObject characterTilePrefab = CharacterTileFactory.Create(container);
+     //   Dictionary<int, CharacterTile> tilesById = new Dictionary<int, CharacterTile>();
+        Tiles.Clear();
+        _tilesById.Clear();
+      //  Tiles = new List<CharacterTile>();
 
         for (int i = 0; i < characterTileDatas.Count; i++)
         {
-            CharacterTileMono characterTileMono = CreateTile(characterTileDatas[i], characterTilePrefab, container);
-            tilesById.Add(characterTileMono.CharacterTile.Id, characterTileMono.CharacterTile);
-            Tiles.Add(characterTileMono.CharacterTile);
+            _currentJobs++;
+            CharacterTileFactory.Create(_characterTileContainer, this, characterTileDatas[i]);
+            //CharacterTileMono characterTileMono = CreateTile(characterTileDatas[i], characterTilePrefab, container);
+          //  tilesById.Add(characterTileMono.CharacterTile.Id, characterTileMono.CharacterTile);
+     //       Tiles.Add(characterTileMono.CharacterTile);
         }
+    }
 
-        _gameFlowService.SetTilesById(tilesById);
+    public void OnCharacterTileCreated(GameObject characterTileGO, CharacterTileMono characterTile)
+    {
+        _tilesById.Add(characterTile.CharacterTile.Id, characterTile.CharacterTile);
+        Tiles.Add(characterTile.CharacterTile);
+        _currentJobs--;
 
-        foreach (KeyValuePair<int, CharacterTile> item in tilesById)
+        if(_currentJobs == 0)
+        {
+            OnCharacterTileCreationFinished();
+        }
+    }
+
+    public void OnCharacterTileCreationFinished()
+    {
+        _gameFlowService.SetTilesById(_tilesById);
+
+        foreach (KeyValuePair<int, CharacterTile> item in _tilesById)
         {
             CharacterTile characterTile = item.Value;
-            List<CharacterTile> tileChildren = GetChildConnections(characterTile, tilesById);
+            List<CharacterTile> tileChildren = GetChildConnections(characterTile, _tilesById);
             CharacterTileMono characterTileMono = characterTile.CharacterTileMono;
             if (characterTileMono)
             {
@@ -44,10 +65,12 @@ public class CharacterTileHandler
             }
         }
 
-        foreach (KeyValuePair<int, CharacterTile> item in tilesById)
+        foreach (KeyValuePair<int, CharacterTile> item in _tilesById)
         {
             item.Value.SetInitialState();
         }
+
+        SortTiles(_characterTileContainer);
     }
 
     // when the tiles are created they are not set in the correct order in the hierarchy
