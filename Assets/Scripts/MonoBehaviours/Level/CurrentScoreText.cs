@@ -4,6 +4,7 @@ using UnityEngine;
 public class CurrentScoreText : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _currentScoreText;
+    private GameFlowService _gameFlowService;
 
     public void Setup()
     {
@@ -11,11 +12,13 @@ public class CurrentScoreText : MonoBehaviour
         {
             ConsoleLog.Error(LogCategory.General, $"Could not find _currentScoreText");
         }
+
+        _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
     }
 
     public void Initialise()
     {
-        GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
+        _gameFlowService.WordSubmitEvent += OnWordSubmitEvent;
 
         SetText($"Score: 0");
     }
@@ -28,9 +31,9 @@ public class CurrentScoreText : MonoBehaviour
     public void OnWordSubmitEvent(object sender, WordSubmitEvent wordSubmitEvent)
     {
         int formedWordValue = wordSubmitEvent.WordPickAction.FormedWord.Value;
-        int currentScore = GameFlowManager.Instance.CurrentScore;
+        int currentScore = _gameFlowService.CurrentScore;
         int newScore = currentScore + formedWordValue;
-        GameFlowManager.Instance.SetCurrentScore(newScore);
+        _gameFlowService.SetCurrentScore(newScore);
 
         SetText($"Score: {newScore}");    
     }

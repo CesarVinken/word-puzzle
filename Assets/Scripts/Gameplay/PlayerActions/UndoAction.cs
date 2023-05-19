@@ -4,6 +4,7 @@ public class UndoAction : IPlayerAction
 {
     public void Execute()
     {
-        GameFlowManager.Instance.ExecuteUndoEvent(this);
+        GameFlowService gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+        gameFlowService.ExecuteUndoEvent(this);
     }
 }

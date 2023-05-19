@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
-public class GameFlowManager : MonoBehaviour
+public class GameFlowService : IGameService
 {
-    public static GameFlowManager Instance;
-
     public List<LetterPickAction> LetterPickActions = new List<LetterPickAction>();
     public Dictionary<int, CharacterTile> TilesById { get; private set; }  = new Dictionary<int, CharacterTile>();
     public int CurrentScore { get; private set; }
@@ -22,8 +20,6 @@ public class GameFlowManager : MonoBehaviour
 
     public void Awake()
     {
-        Instance = this;
-
         MoveHandler = new PlayerActionHandler();
         ValidationHandler = new ValidationHandler();
         _formableWordChecker = new FormableWordChecker();

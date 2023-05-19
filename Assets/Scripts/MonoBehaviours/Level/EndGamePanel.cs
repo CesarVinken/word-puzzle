@@ -9,6 +9,8 @@ public class EndGamePanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _scoreCalculationText;
     [SerializeField] private Button _button;
 
+    private GameFlowService _gameFlowService;
+
     private int _totalScore = 0;
     private int _currentHighScore = 0;
 
@@ -26,6 +28,8 @@ public class EndGamePanel : MonoBehaviour
         {
             ConsoleLog.Error(LogCategory.Initialisation, $"Cannot find _button text");
         }
+
+        _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
 
         _button.onClick.RemoveAllListeners();
         _button.onClick.AddListener(delegate { OnClick(); });
@@ -53,7 +57,8 @@ public class EndGamePanel : MonoBehaviour
 
     private void SetScoreCalculationText()
     {
-        int levelScore = GameFlowManager.Instance.CurrentScore;
+        GameFlowService gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+        int levelScore = gameFlowService.CurrentScore;
         int tilesPenalty = GetTilesPenalty();
         _totalScore = levelScore - tilesPenalty;
 
@@ -64,7 +69,7 @@ public class EndGamePanel : MonoBehaviour
 
     private int GetTilesPenalty()
     {
-        int levelScore = GameFlowManager.Instance.CurrentScore;
+        int levelScore = _gameFlowService.CurrentScore;
         int tilesLeft = CharacterTileHandler.Tiles.Where(t => t.State != CharacterTileState.Used).Count();
         int penaltyPerTile = 100;
 

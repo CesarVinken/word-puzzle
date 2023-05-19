@@ -11,6 +11,7 @@ public class WordSubmitAction : IPlayerAction
 
     public void Execute()
     {
-        GameFlowManager.Instance.ExecuteWordSubmitEvent(this);
+        GameFlowService gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+        gameFlowService.ExecuteWordSubmitEvent(this);
     }
 }

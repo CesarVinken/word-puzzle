@@ -45,19 +45,19 @@ public class LevelUIController : MonoBehaviour
     {
         _levelView.Initialise();
         _celebrationScreen.Initialise();
-
     }
 
     private void Unload()
     {
-        GameFlowManager.Instance.Unload();
+        GameFlowService gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+        gameFlowService.Unload();
 
         _levelView.Unload();
     }
 
     public void ToLevelSelection()
     {
-        Unload();
+        Unload();// TODO CReate Cleaning service instead    
         GameManager.Instance.ToLevelSelection();
     }
 

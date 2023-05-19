@@ -4,11 +4,19 @@ using UnityEngine;
 public class CharacterTileHandler
 {
     public static List<CharacterTile> Tiles = new List<CharacterTile>();
+    private GameFlowService _gameFlowService;
+    private AssetManager _assetManager;
+
+    public void Setup()
+    {
+        _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+        _assetManager = ServiceLocator.Instance.Get<AssetManager>();
+    }
 
     public void PopulateLevel(Transform container)
     {
         List<CharacterTileDataModel> characterTileDatas = GameManager.Instance.CurrentLevelData.LetterTiles;
-        GameObject characterTilePrefab = AssetManager.Instance.GetCharacterTilePrefab();
+        GameObject characterTilePrefab = _assetManager.GetCharacterTilePrefab();
         Dictionary<int, CharacterTile> tilesById = new Dictionary<int, CharacterTile>();
         Tiles = new List<CharacterTile>();
 
@@ -19,7 +27,7 @@ public class CharacterTileHandler
             Tiles.Add(characterTileMono.CharacterTile);
         }
 
-        GameFlowManager.Instance.SetTilesById(tilesById);
+        _gameFlowService.SetTilesById(tilesById);
 
         foreach (KeyValuePair<int, CharacterTile> item in tilesById)
         {
@@ -67,13 +75,13 @@ public class CharacterTileHandler
 
     public void UndoLastTile()
     {
-        LetterPickAction lastLetterPickAction = GameFlowManager.Instance.LetterPickActions[GameFlowManager.Instance.LetterPickActions.Count - 1];
+        LetterPickAction lastLetterPickAction = _gameFlowService.LetterPickActions[_gameFlowService.LetterPickActions.Count - 1];
         lastLetterPickAction.CharacterTile.SetCharacterTileState(CharacterTileState.Open);
-        
-        GameFlowManager.Instance.RemoveLastAction();
 
-        string word = GameFlowManager.Instance.GetFormedWord();
-        GameFlowManager.Instance.ValidationHandler.Validate(word);
+        _gameFlowService.RemoveLastAction();
+
+        string word = _gameFlowService.GetFormedWord();
+        _gameFlowService.ValidationHandler.Validate(word);
     }
 
     private CharacterTileMono CreateTile(CharacterTileDataModel characterTileData, GameObject characterTilePrefab, Transform container)

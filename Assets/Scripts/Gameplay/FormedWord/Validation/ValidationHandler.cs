@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class ValidationHandler
 {
+    private GameFlowService _gameFlowService;
+
+    public ValidationHandler()
+    {
+        _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+    }
+
     public void Validate(string word)
     {
         bool isValid = false;
@@ -17,6 +24,6 @@ public class ValidationHandler
             }
         }
 
-        GameFlowManager.Instance.ExecuteWordValidatedEvent(isValid);
+        _gameFlowService.ExecuteWordValidatedEvent(isValid);
     }
 }

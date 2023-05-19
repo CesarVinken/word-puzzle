@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class FormedWordContainer : MonoBehaviour
 {
-    private FormedWordHandler _formedWordHandler;
     [SerializeField] private List<FormedWordCharacterTile> _formedWordCharacters = new List<FormedWordCharacterTile>();
+
+    private FormedWordHandler _formedWordHandler;
+    private GameFlowService _gameFlowService;
 
     public void Setup()
     {
@@ -12,6 +14,8 @@ public class FormedWordContainer : MonoBehaviour
         {
             ConsoleLog.Error(LogCategory.Initialisation, $"Could nog find any slots to form a word");
         }
+
+        _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
 
         for (int i = 0; i < _formedWordCharacters.Count; i++)
         {
@@ -23,16 +27,16 @@ public class FormedWordContainer : MonoBehaviour
     {
         _formedWordHandler = new FormedWordHandler(_formedWordCharacters);
 
-        GameFlowManager.Instance.LetterPickEvent += OnLetterPickEvent;
-        GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
-        GameFlowManager.Instance.UndoEvent += OnUndoEvent;
+        _gameFlowService.LetterPickEvent += OnLetterPickEvent;
+        _gameFlowService.WordSubmitEvent += OnWordSubmitEvent;
+        _gameFlowService.UndoEvent += OnUndoEvent;
     }
 
     public void Unload()
     {
-        GameFlowManager.Instance.LetterPickEvent -= OnLetterPickEvent;
-        GameFlowManager.Instance.WordSubmitEvent -= OnWordSubmitEvent;
-        GameFlowManager.Instance.UndoEvent -= OnUndoEvent;
+        _gameFlowService.LetterPickEvent -= OnLetterPickEvent;
+        _gameFlowService.WordSubmitEvent -= OnWordSubmitEvent;
+        _gameFlowService.UndoEvent -= OnUndoEvent;
     }
 
     private void OnLetterPickEvent(object sender, LetterPickEvent e)

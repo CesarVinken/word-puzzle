@@ -59,11 +59,13 @@ public class FormableWordChecker
 
     private List<CharacterTile> AddAvailableChildren(List<CharacterTile> tilesToCheck, CharacterTile currentTile, List<CharacterTile> currentSubset)
     {
+        GameFlowService gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+
         List<CharacterTile> checkedTiles = new List<CharacterTile>();
         for (int k = 0; k < currentTile.TileChildren.Count; k++)
         {
             bool blockedByParent = false;
-            CharacterTile child = GameFlowManager.Instance.TilesById[currentTile.CharacterTileData.TileChildren[k]];
+            CharacterTile child = gameFlowService.TilesById[currentTile.CharacterTileData.TileChildren[k]];
 
             if (tilesToCheck.Contains(child)) continue;
             if (currentSubset.Contains(child)) continue;

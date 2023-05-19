@@ -4,6 +4,7 @@ using UnityEngine;
 public class WordScoreProjectionText : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _wordScoreProjectionText;
+    private GameFlowService _gameFlowService;
 
     public void Setup()
     {
@@ -11,18 +12,20 @@ public class WordScoreProjectionText : MonoBehaviour
         {
             ConsoleLog.Error(LogCategory.General, $"Could not find _wordScoreProjectionText");
         }
+
+        _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
     }
 
     public void Initialise()
     {
-        GameFlowManager.Instance.WordValidatedEvent += OnWordValidatedEvent;
-        GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
+        _gameFlowService.WordValidatedEvent += OnWordValidatedEvent;
+        _gameFlowService.WordSubmitEvent += OnWordSubmitEvent;
     }
 
     public void Unload()
     {
-        GameFlowManager.Instance.WordValidatedEvent -= OnWordValidatedEvent;
-        GameFlowManager.Instance.WordSubmitEvent -= OnWordSubmitEvent;
+        _gameFlowService.WordValidatedEvent -= OnWordValidatedEvent;
+        _gameFlowService.WordSubmitEvent -= OnWordSubmitEvent;
     }
 
     private void SetText(string newText)
@@ -34,8 +37,8 @@ public class WordScoreProjectionText : MonoBehaviour
     {
         if (e.IsValid)
         {
-            string word = GameFlowManager.Instance.GetFormedWord();
-            int score = GameFlowManager.Instance.GetCurrentWordScore(word);
+            string word = _gameFlowService.GetFormedWord();
+            int score = _gameFlowService.GetCurrentWordScore(word);
             SetText($"Word Score {score}");
         }
         else

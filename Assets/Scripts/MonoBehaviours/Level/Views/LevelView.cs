@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class LevelView : MonoBehaviour, ILevelScreenView
 {
-
     [SerializeField] private TextMeshProUGUI _levelNameText;
     [SerializeField] private TextMeshProUGUI _submittedWordsText;
 
@@ -17,6 +16,8 @@ public class LevelView : MonoBehaviour, ILevelScreenView
     [SerializeField] private UndoButton _undoButton;
     [SerializeField] private WordConfirmButton _wordConfirmButton;
     [SerializeField] private SettingsMenuButton _settingsMenuButton;
+
+    private GameFlowService _gameFlowService;
 
     public void Setup()
     {
@@ -59,6 +60,8 @@ public class LevelView : MonoBehaviour, ILevelScreenView
             ConsoleLog.Error(LogCategory.General, $"Could not find _settingsMenuButton on {gameObject.name}");
         }
 
+        _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+
         _undoButton.Setup();
         _wordConfirmButton.Setup();
         _settingsMenuButton.Setup();
@@ -80,14 +83,14 @@ public class LevelView : MonoBehaviour, ILevelScreenView
         _wordConfirmButton.Initialise();
         _settingsMenuButton.Initialise();
 
-        GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
+        _gameFlowService.WordSubmitEvent += OnWordSubmitEvent;
 
         _levelNameText.text = GameManager.Instance.CurrentLevelData.Title;
     }
 
     public void Unload()
     {
-        GameFlowManager.Instance.WordSubmitEvent -= OnWordSubmitEvent;
+        _gameFlowService.WordSubmitEvent -= OnWordSubmitEvent;
 
         _formedWordContainer.Unload();
         _wordScoreProjection.Unload();

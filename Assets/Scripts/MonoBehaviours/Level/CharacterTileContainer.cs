@@ -4,10 +4,14 @@ using UnityEngine;
 public class CharacterTileContainer : MonoBehaviour
 {
     private CharacterTileHandler _characterTileHandler;
+    private GameFlowService _gameFlowService;
 
     public void Setup()
     {
+        _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+
         _characterTileHandler = new CharacterTileHandler();
+        _characterTileHandler.Setup();
     }
 
     public void Initialise()
@@ -15,12 +19,12 @@ public class CharacterTileContainer : MonoBehaviour
         _characterTileHandler.PopulateLevel(transform);
         _characterTileHandler.SortTiles(transform);
 
-        GameFlowManager.Instance.UndoEvent += OnUndoEvent;
+        _gameFlowService.UndoEvent += OnUndoEvent;
     }
 
     public void Unload()
     {
-        GameFlowManager.Instance.UndoEvent -= OnUndoEvent;
+        _gameFlowService.UndoEvent -= OnUndoEvent;
     }
 
     public void OnUndoEvent(object sender, UndoEvent e)

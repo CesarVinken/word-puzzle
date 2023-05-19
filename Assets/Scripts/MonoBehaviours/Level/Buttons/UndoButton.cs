@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class UndoButton : MonoBehaviour, ILevelUIButton
 {
     [SerializeField] private Button _button;
+    private GameFlowService _gameFlowService;
 
     public void Setup()
     {
@@ -11,6 +12,8 @@ public class UndoButton : MonoBehaviour, ILevelUIButton
         {
             ConsoleLog.Error(LogCategory.Initialisation, $"Could not find button on {gameObject.name}");
         }
+
+        _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
 
         _button.onClick.RemoveAllListeners();
         _button.onClick.AddListener(delegate { OnClick(); });
@@ -20,14 +23,14 @@ public class UndoButton : MonoBehaviour, ILevelUIButton
     {
         SetButtonInteractability(false);
 
-        GameFlowManager.Instance.LetterPickEvent += OnLetterPickEvent;
-        GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
+        _gameFlowService.LetterPickEvent += OnLetterPickEvent;
+        _gameFlowService.WordSubmitEvent += OnWordSubmitEvent;
     }
 
     public void Unload()
     {
-        GameFlowManager.Instance.LetterPickEvent -= OnLetterPickEvent;
-        GameFlowManager.Instance.WordSubmitEvent -= OnWordSubmitEvent;
+        _gameFlowService.LetterPickEvent -= OnLetterPickEvent;
+        _gameFlowService.WordSubmitEvent -= OnWordSubmitEvent;
     }
 
     public void OnLetterPickEvent(object sender, LetterPickEvent e)
@@ -48,11 +51,11 @@ public class UndoButton : MonoBehaviour, ILevelUIButton
     public void OnClick()
     {
         // if after the undo action there are 0 actions left, then the button should not be interactable
-        if (GameFlowManager.Instance.LetterPickActions.Count < 2) 
+        if (_gameFlowService.LetterPickActions.Count < 2) 
         {
             SetButtonInteractability(false);
         }
 
-        GameFlowManager.Instance.MoveHandler.UndoTile();
+        _gameFlowService.MoveHandler.UndoTile();
     }
 }

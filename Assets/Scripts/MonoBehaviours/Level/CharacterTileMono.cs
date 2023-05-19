@@ -9,6 +9,8 @@ public class CharacterTileMono : MonoBehaviour
     [SerializeField] private Image _image;
     [SerializeField] private TextMeshProUGUI _characterText;
 
+    private GameFlowService _gameFlowService;
+
     public CharacterTile CharacterTile { get; private set; }
 
     public void Setup(CharacterTileDataModel characterTileData)
@@ -25,6 +27,9 @@ public class CharacterTileMono : MonoBehaviour
         {
             ConsoleLog.Error(LogCategory.General, $"Cannot find _character on {gameObject.name}");
         }
+
+        _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+
         CharacterTile = new CharacterTile();
         CharacterTile.Setup(characterTileData, this);
 
@@ -63,9 +68,9 @@ public class CharacterTileMono : MonoBehaviour
     {
         if (CharacterTile.State != CharacterTileState.Open) return;
 
-        if (GameFlowManager.Instance.LetterPickActions.Count >= 7) return; // the player cannot do more moves if the number of moves equals the maximum word length
+        if (_gameFlowService.LetterPickActions.Count >= 7) return; // the player cannot do more moves if the number of moves equals the maximum word length
 
         ConsoleLog.Log(LogCategory.General, $"Add {_characterText.text} to word", LogPriority.Low);
-        GameFlowManager.Instance.MoveHandler.UseTile(CharacterTile);
+        _gameFlowService.MoveHandler.UseTile(CharacterTile);
     }
 }

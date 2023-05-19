@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class PlayerActionHandler
 {
+    private GameFlowService _gameFlowService;
+
+    public PlayerActionHandler()
+    {
+        _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+    }
+
     public void UseTile(CharacterTile characterTile)
     {
         new LetterPickAction(characterTile).Execute();
@@ -14,8 +21,8 @@ public class PlayerActionHandler
 
     public void SubmitWord()
     {
-        string word = GameFlowManager.Instance.GetFormedWord();;
-        int wordValue = GameFlowManager.Instance.GetCurrentWordScore(word);
+        string word = _gameFlowService.GetFormedWord();;
+        int wordValue = _gameFlowService.GetCurrentWordScore(word);
 
         FormedWord formedWord = new FormedWord(word, wordValue);
 

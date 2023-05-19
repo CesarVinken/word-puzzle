@@ -9,7 +9,9 @@ public class LetterPickAction : IPlayerAction
 
     public void Execute()
     {
-        GameFlowManager.Instance.ExecuteLetterPickEvent(this);
+        GameFlowService gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
+
+        gameFlowService.ExecuteLetterPickEvent(this);
 
         CharacterTile.SetCharacterTileState(CharacterTileState.Used);
     }

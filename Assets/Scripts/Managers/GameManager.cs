@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,6 +23,10 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+
+        ServiceLocator.Setup();
+        ServiceLocator.Instance.Register<GameFlowService>(new GameFlowService());
+        ServiceLocator.Instance.Register<AssetManager>(new AssetManager());
 
         _dataHandler = new DataHandler();
 

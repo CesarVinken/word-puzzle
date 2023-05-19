@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class WordConfirmButton : MonoBehaviour, ILevelUIButton
 {
     [SerializeField] private Button _button;
+    private GameFlowService _gameFlowService;
 
     public void Setup()
     {
@@ -11,6 +12,8 @@ public class WordConfirmButton : MonoBehaviour, ILevelUIButton
         {
             ConsoleLog.Error(LogCategory.Initialisation, $"Could not find button on {gameObject.name}");
         }
+
+        _gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
 
         _button.onClick.RemoveAllListeners();
         _button.onClick.AddListener(delegate { OnClick(); });
@@ -20,14 +23,14 @@ public class WordConfirmButton : MonoBehaviour, ILevelUIButton
     {
         _button.interactable = false;
 
-        GameFlowManager.Instance.WordValidatedEvent += OnWordValidatedEvent;
-        GameFlowManager.Instance.WordSubmitEvent += OnWordSubmitEvent;
+        _gameFlowService.WordValidatedEvent += OnWordValidatedEvent;
+        _gameFlowService.WordSubmitEvent += OnWordSubmitEvent;
     }
 
     public void Unload()
     {
-        GameFlowManager.Instance.WordValidatedEvent -= OnWordValidatedEvent;
-        GameFlowManager.Instance.WordSubmitEvent -= OnWordSubmitEvent;
+        _gameFlowService.WordValidatedEvent -= OnWordValidatedEvent;
+        _gameFlowService.WordSubmitEvent -= OnWordSubmitEvent;
     }
 
     public void OnWordValidatedEvent(object sender, WordValidatedEvent e)
@@ -43,6 +46,6 @@ public class WordConfirmButton : MonoBehaviour, ILevelUIButton
 
     public void OnClick()
     {
-        GameFlowManager.Instance.MoveHandler.SubmitWord();
+        _gameFlowService.MoveHandler.SubmitWord();
     }
 }
