@@ -1,23 +1,21 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-/// <summary>
-/// The Service Locator is the central hub from where we take all IGameServices. 
-/// </summary>
-public class ServiceLocator : IServiceLocator
+public class UIComponentLocator : IServiceLocator
 {
-    private ServiceLocator() { }
+    private UIComponentLocator() { }
 
-    private readonly Dictionary<string, IGameService> _services = new Dictionary<string, IGameService>();
+    private readonly Dictionary<string, IUIComponent> _services = new Dictionary<string, IUIComponent>();
 
-    public static ServiceLocator Instance { get; private set; }
+    public static UIComponentLocator Instance { get; private set; }
 
     public static void Setup()
     {
-        Instance = new ServiceLocator();
+        Instance = new UIComponentLocator();
     }
 
-    public T Get<T>() where T : IGameService
+    public T Get<T>() where T : IUIComponent
     {
         string key = typeof(T).Name;
         if (!_services.ContainsKey(key))
@@ -29,7 +27,7 @@ public class ServiceLocator : IServiceLocator
         return (T)_services[key];
     }
 
-    public void Register<T>(T service) where T : IGameService
+    public void Register<T>(T service) where T : IUIComponent
     {
         string key = typeof(T).Name;
         if (_services.ContainsKey(key))
@@ -41,7 +39,7 @@ public class ServiceLocator : IServiceLocator
         _services.Add(key, service);
     }
 
-    public void Deregister<T>() where T : IGameService
+    public void Deregister<T>() where T : IUIComponent
     {
         string key = typeof(T).Name;
         if (!_services.ContainsKey(key))

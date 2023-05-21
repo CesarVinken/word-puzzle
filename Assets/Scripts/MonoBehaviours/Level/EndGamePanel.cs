@@ -87,14 +87,16 @@ public class EndGamePanel : MonoBehaviour
 
     public void OnClick()
     {
-        if(_totalScore > _currentHighScore)
+        LevelUIController levelUIController = UIComponentLocator.Instance.Get<LevelUIController>();
+
+        if (_totalScore > _currentHighScore)
         {
             GameManager.Instance.SaveNewHighScore(_totalScore);
-            LevelUIController.Instance.ToCelebration();
+            levelUIController.ToCelebration();
         }
         else
         {
-            LevelUIController.Instance.ToLevelSelection();
+            levelUIController.ToLevelSelection();
         }
     }
 }

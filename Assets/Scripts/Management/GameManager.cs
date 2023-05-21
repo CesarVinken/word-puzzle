@@ -24,8 +24,11 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
 
+        UIComponentLocator.Setup();
+
         ServiceLocator.Setup();
         ServiceLocator.Instance.Register<GameFlowService>(new GameFlowService());
+        ServiceLocator.Instance.Register<CleanupService>(new CleanupService());
 
         _dataHandler = new DataHandler();
 
@@ -40,7 +43,7 @@ public class GameManager : MonoBehaviour
         gameFlowService.Setup();
         gameFlowService.Initialise();
 
-        // todo make async
+
         _dataHandler.Initialise();
         GameData = _dataHandler.GetGameData();
         UserData = _dataHandler.GetUserData();
@@ -50,14 +53,6 @@ public class GameManager : MonoBehaviour
         if (PreviousScene == SceneType.None && sceneName == "Level") // this means this is a start up of the Level scene directly in Unity and we never selected a current level in the menu
         {
             SetCurrentLevel(GameData.Levels[0]);
-
-            if (LevelUIController.Instance == null)
-            {
-                ConsoleLog.Error(LogCategory.General, $"Could not find the Instance of the LevelUIController");
-            }
-
-            LevelUIController.Instance.Setup();
-            LevelUIController.Instance.Initialise();
         }
     }
 
@@ -68,6 +63,9 @@ public class GameManager : MonoBehaviour
 
     public void ToLevel(LevelDataModel levelData)
     {
+        CleanupService cleanupService = ServiceLocator.Instance.Get<CleanupService>();
+        cleanupService.UnloadTitleScreen();
+
         ConsoleLog.Log(LogCategory.General, $"Load level {levelData.LevelNumber}: {levelData.Title}");
 
         PreviousScene = SceneType.Title;
@@ -78,6 +76,9 @@ public class GameManager : MonoBehaviour
 
     public void ToLevelSelection()
     {
+        CleanupService cleanupService = ServiceLocator.Instance.Get<CleanupService>();
+        cleanupService.UnloadLevel();
+
         PreviousScene = SceneType.Level;
 
         SetCurrentLevel(null);

@@ -1,10 +1,8 @@
 using TMPro;
 using UnityEngine;
 
-public class LevelUIController : MonoBehaviour
+public class LevelUIController : MonoBehaviour, IUIComponent
 {
-    public static LevelUIController Instance;
-
     [SerializeField] private LevelView _levelView;
     [SerializeField] private CelebrationView _celebrationScreen;
 
@@ -20,17 +18,14 @@ public class LevelUIController : MonoBehaviour
         {
             ConsoleLog.Error(LogCategory.General, $"Could not find _celebrationScreen");
         }
-
-        Instance = this;
     }
 
     private void Start()
     {
-        if (GameManager.Instance.PreviousScene != SceneType.None)
-        {
-            Setup();
-            Initialise();
-        }
+        UIComponentLocator.Instance.Register<LevelUIController>(this);
+
+        Setup();
+        Initialise();
 
         SetCurrentView(_levelView);
     }
@@ -47,17 +42,14 @@ public class LevelUIController : MonoBehaviour
         _celebrationScreen.Initialise();
     }
 
-    private void Unload()
+    public void Unload()
     {
-        GameFlowService gameFlowService = ServiceLocator.Instance.Get<GameFlowService>();
-        gameFlowService.Unload();
-
         _levelView.Unload();
+        UIComponentLocator.Instance.Deregister<LevelUIController>();
     }
 
     public void ToLevelSelection()
     {
-        Unload();// TODO CReate Cleaning service instead    
         GameManager.Instance.ToLevelSelection();
     }
 

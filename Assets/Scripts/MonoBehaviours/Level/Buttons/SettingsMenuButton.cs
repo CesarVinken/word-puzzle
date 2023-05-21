@@ -23,6 +23,7 @@ public class SettingsMenuButton : MonoBehaviour, ILevelUIButton
 
     public void OnClick()
     {
-        LevelUIController.Instance.ToLevelSelection();
+        LevelUIController levelUIController = UIComponentLocator.Instance.Get<LevelUIController>();
+        levelUIController.ToLevelSelection();
     }
 }

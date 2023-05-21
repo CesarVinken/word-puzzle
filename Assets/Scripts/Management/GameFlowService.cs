@@ -72,7 +72,8 @@ public class GameFlowService : IGameService
 
         if (!formableWordLeft)
         {
-            LevelUIController.Instance.ShowEndGamePanel();
+            LevelUIController levelUIController = UIComponentLocator.Instance.Get<LevelUIController>();
+            levelUIController.ShowEndGamePanel();
         }
 
         stopwatch.Stop();

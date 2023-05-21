@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TitleScreenController : MonoBehaviour
+public class TitleScreenController : MonoBehaviour, IUIComponent
 {
     public static TitleScreenController Instance;
 
@@ -28,6 +28,7 @@ public class TitleScreenController : MonoBehaviour
 
     private void Start()
     {
+        UIComponentLocator.Instance.Register<TitleScreenController>(this);
 
         if(GameManager.Instance.PreviousScene == SceneType.None)
         {
@@ -39,6 +40,11 @@ public class TitleScreenController : MonoBehaviour
             _levelSelectionView.Initialise();
             SetCurrentView(_levelSelectionView);
         }
+    }
+
+    public void Unload()
+    {
+        UIComponentLocator.Instance.Deregister<TitleScreenController>();
     }
 
     public void ToLevel(LevelDataModel levelData)

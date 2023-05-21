@@ -49,6 +49,7 @@ public class CelebrationView : MonoBehaviour, ILevelScreenView
     {
         yield return new WaitForSeconds(3f);
 
-        LevelUIController.Instance.ToLevelSelection();
+        LevelUIController levelUIController = UIComponentLocator.Instance.Get<LevelUIController>();
+        levelUIController.ToLevelSelection();
     }
 }
