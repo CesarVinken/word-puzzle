@@ -1,19 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelSelectionView : MonoBehaviour, ITitleScreenView
 {
-    [SerializeField] private GameObject _levelSelectionTilePrefab;
-
     [SerializeField] private Transform _tilesContainer;
 
     public void Setup()
     {
-        if (_levelSelectionTilePrefab == null)
-        {
-            ConsoleLog.Error(LogCategory.Initialisation, $"Could not find levelSelectionTilePrefab");
-        }
 
         if (_tilesContainer == null)
         {
@@ -23,8 +16,18 @@ public class LevelSelectionView : MonoBehaviour, ITitleScreenView
 
     public void Initialise()
     {
-        LevelSelectionTileCreator levelSelectionTileCreator = new LevelSelectionTileCreator(_levelSelectionTilePrefab, _tilesContainer);
-        levelSelectionTileCreator.CreateTiles();
+        CreateTiles();
+    }
+
+    private void CreateTiles()
+    {
+        List<LevelDataModel> levels = GameManager.Instance.GameData.Levels;
+
+        for (int i = 0; i < levels.Count; i++)
+        {
+            ConsoleLog.Log(LogCategory.Data, $"Add tile for level {levels[i].LevelNumber} {levels[i].Title}", LogPriority.Low);
+            LevelSelectionTileFactory.Create(_tilesContainer, levels[i]);
+        }
     }
 
     public void Show()

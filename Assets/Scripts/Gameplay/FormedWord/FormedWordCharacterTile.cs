@@ -9,14 +9,4 @@ public class FormedWordCharacter
     {
         Character = character;
     }
-
-    public void Setup()
-    {
-        // calculate score
-    }
-
-    public void Initialise()
-    {
-        
-    }
 }

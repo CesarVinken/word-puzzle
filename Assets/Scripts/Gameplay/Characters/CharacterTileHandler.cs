@@ -1,11 +1,12 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+
 public class CharacterTileHandler
 {
     public static List<CharacterTile> Tiles = new List<CharacterTile>();
+    
+    private Dictionary<int, CharacterTile> _tilesById = new Dictionary<int, CharacterTile>();
     private GameFlowService _gameFlowService;
-    Dictionary<int, CharacterTile> _tilesById = new Dictionary<int, CharacterTile>();
     private int _currentJobs = 0;
     private Transform _characterTileContainer;
 
@@ -18,19 +19,14 @@ public class CharacterTileHandler
     {
         _characterTileContainer = container;
         List<CharacterTileDataModel> characterTileDatas = GameManager.Instance.CurrentLevelData.LetterTiles;
-    //    GameObject characterTilePrefab = CharacterTileFactory.Create(container);
-     //   Dictionary<int, CharacterTile> tilesById = new Dictionary<int, CharacterTile>();
+
         Tiles.Clear();
         _tilesById.Clear();
-      //  Tiles = new List<CharacterTile>();
 
         for (int i = 0; i < characterTileDatas.Count; i++)
         {
             _currentJobs++;
             CharacterTileFactory.Create(_characterTileContainer, this, characterTileDatas[i]);
-            //CharacterTileMono characterTileMono = CreateTile(characterTileDatas[i], characterTilePrefab, container);
-          //  tilesById.Add(characterTileMono.CharacterTile.Id, characterTileMono.CharacterTile);
-     //       Tiles.Add(characterTileMono.CharacterTile);
         }
     }
 
@@ -105,22 +101,6 @@ public class CharacterTileHandler
 
         string word = _gameFlowService.GetFormedWord();
         _gameFlowService.ValidationHandler.Validate(word);
-    }
-
-    private CharacterTileMono CreateTile(CharacterTileDataModel characterTileData, GameObject characterTilePrefab, Transform container)
-    {
-        // todo we can use object pooling here
-        GameObject characterTileGO = GameObject.Instantiate(characterTilePrefab, container);
-
-        RectTransform tileRectTransform = characterTileGO.GetComponent<RectTransform>();
-
-        Vector3 tilePosition = new Vector3((characterTileData.TilePosition.x * 12), characterTileData.TilePosition.y * 12, characterTileData.TilePosition.z);
-
-        tileRectTransform.localPosition = tilePosition;
-
-        CharacterTileMono characterTile = characterTileGO.GetComponent<CharacterTileMono>();
-        characterTile.Setup(characterTileData);
-        return characterTile;
     }
 
     private List<CharacterTile> GetChildConnections(CharacterTile characterTile, Dictionary<int, CharacterTile> tilesById)

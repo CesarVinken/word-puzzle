@@ -16,4 +16,3 @@ public class CharacterTileDataModel
         TileChildren = tileChildren;
     }
 }
-
