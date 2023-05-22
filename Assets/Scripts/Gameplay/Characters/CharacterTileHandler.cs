@@ -94,6 +94,12 @@ public class CharacterTileHandler
 
     public void UndoLastTile()
     {
+        if (_gameFlowService.LetterPickActions.Count == 0)
+        {
+            ConsoleLog.Warning(LogCategory.General, $"We should not be requested to undo a tile here if there, because there are no actions to undo");
+            return;
+        }
+
         LetterPickAction lastLetterPickAction = _gameFlowService.LetterPickActions[_gameFlowService.LetterPickActions.Count - 1];
         lastLetterPickAction.CharacterTile.SetCharacterTileState(CharacterTileState.Open);
 

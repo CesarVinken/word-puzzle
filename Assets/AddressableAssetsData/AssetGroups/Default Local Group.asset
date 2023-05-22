@@ -21,6 +21,10 @@ MonoBehaviour:
     m_Address: CharacterTile.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: b031d14ad05ed21448a2c9359f159ce6
+    m_Address: LevelSelectionTile.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b2ef71abdfe1c9f4a8a0e1ba529e868d, type: 2}
   m_SchemaSet:

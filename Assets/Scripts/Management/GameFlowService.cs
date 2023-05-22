@@ -33,8 +33,7 @@ public class GameFlowService : IGameService
 
     public void Unload()
     {
-        LetterPickEvent -= OnLetterPickEvent;
-        WordSubmitEvent -= OnWordSubmitEvent;
+        ClearActions();
     }
 
     public void SetTilesById(Dictionary<int, CharacterTile> tilesById)
